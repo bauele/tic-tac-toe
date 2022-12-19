@@ -1,38 +1,281 @@
+:root {
+    --dark-navy: #1a2a33;
+    --semi-dark-navy: #1f3641;
+    --semi-dark-navy-shadow: #10212a;
+    --light-yellow: #f2b137;
+    --light-yellow-shadow: #cc8b13;
+    --light-blue: #31c3bd;
+    --light-blue-shadow: #118c87;
+    --silver: #a8bfc9;
+}
+
+@font-face {
+    font-family: 'Outfit';
+    src: url('assets/Outfit-VariableFont_wght.ttf');
+}
+
 .App {
+    height: 100vh;
+    width: 100vw;
+
+    background-color: var(--dark-navy);
+
+    color: var(--silver);
+
+    font-family: 'Outfit';
+}
+
+.flex-row-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.flex-col-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.token-logo-group {
+    gap: 8px;
+}
+
+.token-image-logo {
+    width: 32px;
+    height: 32px;
+}
+
+.token-image-filter-silver img {
+    filter: brightness(0) saturate(100%) invert(90%) sepia(10%) saturate(485%)
+        hue-rotate(156deg) brightness(84%) contrast(85%);
+}
+
+.token-image-filter-dark-navy img {
+    filter: brightness(0) saturate(100%) invert(18%) sepia(23%) saturate(823%)
+        hue-rotate(154deg) brightness(96%) contrast(95%);
+}
+
+/*  Styles for new-game-menu */
+
+/*  The margin rule will ensure that the new game menu is at least 24 
+    horizontal pixels away from the left and right of the screen. Setting the
+    width to 100% will allow the element to be gradually responsive up to the
+    maximum specified width */
+.new-game-menu {
+    margin: 0px 24px;
+    width: 100%;
+    min-width: 327px;
+    max-width: 460px;
+
     text-align: center;
 }
 
-.App-logo {
-    height: 40vmin;
-    pointer-events: none;
+/*  The overflow rule is to prevent margin collapse */
+.new-game-menu-token-select-box {
+    overflow: auto;
+
+    margin: 32px 0px;
+    height: 205px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-        animation: App-logo-spin infinite 20s linear;
-    }
+.new-game-pick-mark-heading {
+    margin: 24px 0px;
 }
 
-.App-header {
-    background-color: #282c34;
-    min-height: 100vh;
+.new-game-p-text {
+    margin-top: 17px;
+    margin-bottom: 30px;
+}
+
+.new-game-buttons-group {
+    gap: 16px;
+}
+
+.new-game-button {
+    border: none;
+    min-height: 56px;
+    width: 100%;
+
+    cursor: pointer;
+
+    font-family: 'Outfit';
+    color: var(--dark-navy);
+}
+
+.new-game-button p {
+    position: relative;
+
+    margin-top: 14px;
+    margin-bottom: 22px;
+}
+
+.new-game-switch-box {
+    margin: 0px 24px;
+    min-width: 279px;
+    max-width: 412px;
+    height: 72px;
+
+    font-size: 20px;
+}
+
+.new-game-switch-box-inner {
+    position: relative;
+
     display: flex;
-    flex-direction: column;
+    justify-content: space-around;
     align-items: center;
+
+    box-sizing: border-box;
+    width: 100%;
+    height: 72px;
+    padding: 9px 9px;
+
+    background-color: var(--dark-navy);
+    cursor: pointer;
+}
+
+.switch-option {
+    display: flex;
     justify-content: center;
-    font-size: calc(10px + 2vmin);
-    color: white;
+    align-items: center;
+
+    width: 100%;
+    height: 100%;
 }
 
-.App-link {
-    color: #61dafb;
+.switch-toggled {
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    margin: 9px 8px;
+    width: calc(100% / 2 - 8px);
+    height: 100%;
+    max-height: 54px;
+
+    background-color: var(--silver);
 }
 
-@keyframes App-logo-spin {
+.switch-radio-accessibiltiy {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/*  Switch animations */
+@keyframes switch-toggle-move-right {
     from {
-        transform: rotate(0deg);
+        transform: translateX(0px);
     }
     to {
-        transform: rotate(360deg);
+        transform: translateX(calc(100%));
     }
+}
+
+@keyframes switch-toggle-move-left {
+    from {
+        transform: translateX(calc(100%));
+    }
+    to {
+        transform: translateX(0px);
+    }
+}
+
+.switch-toggled-move-right {
+    animation-name: switch-toggle-move-right;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+.switch-toggled-move-left {
+    animation-name: switch-toggle-move-left;
+    animation-duration: 0.5s;
+    animation-fill-mode: forwards;
+}
+
+/*  Headings */
+.upper-text {
+    text-transform: uppercase;
+}
+
+.heading-lg {
+    font-size: 40px;
+    line-height: 50px;
+    letter-spacing: 5px;
+}
+
+.heading-md {
+    font-size: 24px;
+    line-height: 30px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+}
+
+.heading-sm {
+    font-size: 20px;
+    line-height: 25px;
+    font-weight: 700;
+    letter-spacing: 1.25px;
+}
+
+.heading-xs {
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.body {
+    font-size: 14px;
+    line-height: 18px;
+    font-style: 'normal';
+    font-weight: 500;
+    letter-spacing: 0.875px;
+}
+
+/*  Utility */
+.bg-semi-dark-navy {
+    background-color: var(--semi-dark-navy);
+}
+
+.bg-light-yellow {
+    background-color: var(--light-yellow);
+}
+
+.bg-light-blue {
+    background-color: var(--light-blue);
+}
+
+.bg-silver {
+    background-color: var(--silver);
+}
+
+.box-shadow-semi-dark-navy {
+    box-shadow: inset 0px -8px 0px #10212a;
+}
+
+.box-shadow-light-yellow {
+    box-shadow: inset 0px -8px 0px var(--light-yellow-shadow);
+}
+
+.box-shadow-light-blue {
+    box-shadow: inset 0px -8px 0px var(--light-blue-shadow);
+}
+
+.border-radius-5 {
+    border-radius: 5px;
+}
+
+.border-radius-10 {
+    border-radius: 10px;
+}
+
+.border-radius-15 {
+    border-radius: 15px;
+}
+
+.opacity-50 {
+    opacity: 0.5;
 }
