@@ -7,6 +7,7 @@
     --light-blue: #31c3bd;
     --light-blue-shadow: #118c87;
     --silver: #a8bfc9;
+    --silver-shadow: #6b8997;
 }
 
 @font-face {
@@ -28,6 +29,12 @@
 .flex-row-center {
     display: flex;
     justify-content: center;
+    align-items: center;
+}
+
+.flex-row-space-between {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
 }
 
@@ -202,6 +209,37 @@
     max-height: 623px;
 }
 
+.play-game-top-menu {
+    margin-bottom: 64px;
+}
+
+.play-game-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    align-content: center;
+    gap: 20px;
+    width: 60vw;
+    height: 100%;
+
+    min-width: 328px;
+    max-width: 460px;
+}
+
+.play-game-reload {
+    justify-self: end;
+
+    border: none;
+
+    width: 40px;
+    height: 40px;
+}
+
+.play-game-reload p {
+    margin-top: -8px;
+    margin-bottom: 0px;
+    font-size: 30px;
+}
+
 .gameboard {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
@@ -222,8 +260,38 @@
 }
 
 .gameboard-token {
-    width: 64;
+    width: 64px;
     height: 64px;
+}
+
+.player-turn-indicator {
+    min-width: 96px;
+    max-width: 140px;
+    min-height: 40px;
+    max-height: 52px;
+}
+
+.player-turn-indicator-group {
+    display: flex;
+    margin-left: 15px;
+    margin-top: 13px;
+    gap: 9px;
+}
+
+.player-turn-mark {
+    width: 16px;
+    height: 16px;
+}
+
+.play-turn-heading {
+    margin-top: 0px;
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 1px;
 }
 
 /*  Headings */
@@ -287,12 +355,20 @@
     box-shadow: inset 0px -8px 0px #10212a;
 }
 
+.box-shadow-semi-dark-navy-sm {
+    box-shadow: inset 0px -4px 0px #10212a;
+}
+
 .box-shadow-light-yellow {
     box-shadow: inset 0px -8px 0px var(--light-yellow-shadow);
 }
 
 .box-shadow-light-blue {
     box-shadow: inset 0px -8px 0px var(--light-blue-shadow);
+}
+
+.box-shadow-silver-sm {
+    box-shadow: inset 0px -4px 0px var(--silver-shadow);
 }
 
 .border-radius-5 {
@@ -309,4 +385,8 @@
 
 .opacity-50 {
     opacity: 0.5;
+}
+
+.w-100 {
+    width: 100%;
 }

@@ -47,5 +47,5 @@ export const Gameboard = ({ board, onUpdate }: GameboardProps) => {
         });
     });
 
-    return <div className="gameboard"> {gameBoardSpaces} </div>;
+    return <div className="play-game-grid"> {gameBoardSpaces} </div>;
 };
