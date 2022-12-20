@@ -103,8 +103,6 @@ describe('Switch', () => {
             />
         );
 
-        console.log(optionOne);
-
         expect(optionOne).not.toHaveClass('selected-class');
         expect(optionTwo).toHaveClass('default-class selected-class');
     });
@@ -147,8 +145,6 @@ describe('Switch', () => {
                 onChange={setSelected}
             />
         );
-
-        console.log(optionOne);
 
         expect(optionOne).not.toHaveClass('selected-class');
         expect(optionTwo).toHaveClass('default-class selected-class');

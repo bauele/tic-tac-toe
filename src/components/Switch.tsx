@@ -54,7 +54,7 @@ export const Switch = ({
                         ariaChecked={index === selected ? true : false}
                         onClick={() => setValue(index)}
                         onKeyDown={(e) => {
-                            if (e.key === 'Enter' || e.code == 'Space') {
+                            if (e.key === 'Enter' || e.code === 'Space') {
                                 setValue(index);
                             }
                         }}
