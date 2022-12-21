@@ -1,7 +1,8 @@
 import { useState } from 'react';
 
-import { Gameboard } from './Gameboard';
 import { PlayerTurnIndicator } from './PlayerTurnIndicator';
+import { Gameboard } from './Gameboard';
+import { ScoreCard } from './ScoreCard';
 
 import logo from '../assets/logo.svg';
 
@@ -42,6 +43,11 @@ export const PlayGame = ({}: PlayGameProps) => {
                 </button>
             </div>
             <Gameboard board={board} onUpdate={updateBoard} />
+            <div className="play-game-grid play-game-score-cards">
+                <ScoreCard color="light-blue" heading="X (You)" score={0} />
+                <ScoreCard color="silver" heading="Ties" score={0} />
+                <ScoreCard color="light-yellow" heading="O (CPU)" score={0} />
+            </div>
         </div>
     );
 };

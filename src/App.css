@@ -320,6 +320,39 @@
     letter-spacing: 0.88px;
 }
 
+.play-game-score-cards {
+    margin-top: 20px;
+}
+
+.score-card {
+    border-radius: 10px;
+
+    height: 10vw;
+    min-height: 64px;
+    max-height: 72px;
+    min-width: 96px;
+    max-width: 140px;
+
+    font-family: 'Outfit';
+    color: var(--dark-navy);
+}
+
+.score-card-heading {
+    margin: 0;
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 15.12px;
+    letter-spacing: 0.75px;
+}
+
+.score-card-value {
+    margin: 0;
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 25.2px;
+    letter-spacing: 1.25px;
+}
+
 /*  Headings */
 .upper-text {
     text-transform: uppercase;
@@ -432,5 +465,21 @@
 
     .play-game-top-menu-expanding-element {
         border-radius: 10px;
+    }
+
+    .score-card {
+        border-radius: 15px;
+    }
+
+    .score-card-heading {
+        font-size: 14px;
+        line-height: 17.64px;
+        letter-spacing: 0.88px;
+    }
+
+    .score-card-value {
+        font-size: 24px;
+        line-height: 30.24px;
+        letter-spacing: 1.5px;
     }
 }
