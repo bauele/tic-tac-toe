@@ -38,12 +38,12 @@ export const PlayGame = ({}: PlayGameProps) => {
             <div className="play-game-grid play-game-top-menu  flex-row-space-between">
                 {' '}
                 <img src={logo} aria-label="logo" />
-                <div className="player-turn-indicator bg-semi-dark-navy box-shadow-semi-dark-navy-sm border-radius-5">
+                <div className="player-turn-indicator-box bg-semi-dark-navy box-shadow-semi-dark-navy-sm">
                     <div className="player-turn-indicator-group">
                         <div className="token-image-filter-silver">
                             {playerTurn === 1 ? (
                                 <img
-                                    className="player-turn-mark o"
+                                    className="player-turn-mark"
                                     src={xTokenImage}
                                     aria-label={'x-mark'}
                                 />

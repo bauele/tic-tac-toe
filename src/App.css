@@ -210,6 +210,9 @@
 }
 
 .play-game-top-menu {
+    min-height: 40px;
+    max-height: 40px;
+    height: 7vw;
     margin-bottom: 64px;
 }
 
@@ -264,6 +267,13 @@
     height: 64px;
 }
 
+.player-turn-indicator-box {
+    height: 7vw;
+    border-radius: 5px;
+    max-height: 52px;
+    min-height: 40px;
+}
+
 .player-turn-indicator {
     min-width: 96px;
     max-width: 140px;
@@ -272,26 +282,41 @@
 }
 
 .player-turn-indicator-group {
-    display: flex;
-    margin-left: 15px;
-    margin-top: 13px;
-    gap: 9px;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    max-height: 52px;
+    min-height: 40px;
 }
 
 .player-turn-mark {
-    width: 16px;
-    height: 16px;
+    width: 16.7%;
+    position: absolute;
+    top: 25%;
+    left: calc(15px + (calc(100% - 96px) * 0.33));
+    max-height: 20px;
+    max-width: 20px;
+    min-width: 16px;
+    min-height: 16px;
+    aspect-ratio: 1;
 }
 
 .play-turn-heading {
+    position: absolute;
+    right: calc(15px + (calc(100% - 96px) * 0.33));
+    margin: 0;
+    bottom: 13px;
+    /*
+    top: calc(25%); */
+    top: calc(50% - 18px / 2 - 2px);
     margin-top: 0px;
     font-family: 'Outfit';
     font-style: normal;
     font-weight: 700;
     font-size: 14px;
-    line-height: 20px;
+    line-height: 18px;
     text-align: center;
-    letter-spacing: 1px;
+    letter-spacing: 0.88px;
 }
 
 /*  Headings */
@@ -389,4 +414,17 @@
 
 .w-100 {
     width: 100%;
+}
+
+@media only screen and (min-width: 768px) {
+    .play-turn-heading {
+        top: calc(50% - 20px / 2 - 3px);
+        font-size: 16px;
+        line-height: 20px;
+        letter-spacing: 1px;
+    }
+
+    .player-turn-indicator-box {
+        border-radius: 10px;
+    }
 }
