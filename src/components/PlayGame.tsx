@@ -1,9 +1,8 @@
 import { useState } from 'react';
 
 import { Gameboard } from './Gameboard';
+import { PlayerTurnIndicator } from './PlayerTurnIndicator';
 
-import xTokenImage from '../assets/icon-x.svg';
-import oTokenImage from '../assets/icon-o.svg';
 import logo from '../assets/logo.svg';
 
 type PlayGameProps = {};
@@ -36,26 +35,8 @@ export const PlayGame = ({}: PlayGameProps) => {
     return (
         <div className="flex-col-center new-game-menu play-game">
             <div className="play-game-grid play-game-top-menu  flex-row-space-between">
-                {' '}
                 <img src={logo} aria-label="logo" />
-                <div className="play-game-top-menu-expanding-element bg-semi-dark-navy box-shadow-semi-dark-navy-sm">
-                    <div className="token-image-filter-silver">
-                        {playerTurn === 1 ? (
-                            <img
-                                className="player-turn-mark"
-                                src={xTokenImage}
-                                aria-label={'x-mark'}
-                            />
-                        ) : (
-                            <img
-                                className="player-turn-mark"
-                                src={oTokenImage}
-                                aria-label={'x-mark'}
-                            />
-                        )}
-                        <p className="player-turn-heading upper-text"> Turn</p>
-                    </div>
-                </div>
+                <PlayerTurnIndicator playerTurn={playerTurn} />
                 <button className="play-game-reload play-game-top-menu-expanding-element bg-silver box-shadow-silver-sm">
                     <p className="heading-xs">↻</p>
                 </button>
