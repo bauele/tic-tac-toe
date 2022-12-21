@@ -16,6 +16,9 @@
 }
 
 .App {
+    display: flex;
+    justify-content: center;
+
     height: 100vh;
     width: 100vw;
 
@@ -42,7 +45,6 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
 }
 
 .token-logo-group {
@@ -64,6 +66,15 @@
         hue-rotate(154deg) brightness(96%) contrast(95%);
 }
 
+.main-horizontal-content {
+    margin: 0px 24px;
+    width: 100%;
+    min-width: 327px;
+    max-width: 460px;
+
+    text-align: center;
+}
+
 /*  Styles for new-game-menu */
 
 /*  The margin rule will ensure that the new game menu is at least 24 
@@ -71,12 +82,7 @@
     width to 100% will allow the element to be gradually responsive up to the
     maximum specified width */
 .new-game-menu {
-    margin: 0px 24px;
-    width: 100%;
-    min-width: 327px;
-    max-width: 460px;
-
-    text-align: center;
+    align-self: center;
 }
 
 /*  The overflow rule is to prevent margin collapse */
@@ -204,6 +210,11 @@
 
 /*  Game classes */
 .play-game {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    margin-top: 24px;
     height: 100%;
     min-height: 516px;
     max-height: 623px;
@@ -461,6 +472,16 @@
 
     .player-turn-indicator-box {
         border-radius: 10px;
+    }
+
+    .play-game {
+        align-self: center;
+
+        margin-top: 0px;
+    }
+
+    .play-game-top-menu {
+        margin-bottom: 19px;
     }
 
     .play-game-top-menu-expanding-element {

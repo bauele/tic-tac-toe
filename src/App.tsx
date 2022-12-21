@@ -5,10 +5,8 @@ import { PlayGame } from './components/PlayGame';
 
 function App() {
     return (
-        <div className="App flex-row-center">
-            {/*
-            <NewGameMenu />
-            */}
+        <div className="App">
+            {/*<NewGameMenu />*/}
 
             {<PlayGame />}
         </div>

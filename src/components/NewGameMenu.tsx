@@ -10,7 +10,7 @@ export const NewGameMenu = () => {
     const [selectedSwitch, setSelectedSwitch] = useState(0);
 
     return (
-        <div className="new-game-menu">
+        <div className="main-horizontal-content new-game-menu">
             <div className="flex-row-center token-logo-group">
                 <img className="token-image-logo" src={xTokenImage} />
                 <img className="token-image-logo" src={oTokenImage} />

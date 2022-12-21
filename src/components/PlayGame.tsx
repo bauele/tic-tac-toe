@@ -34,7 +34,7 @@ export const PlayGame = ({}: PlayGameProps) => {
     };
 
     return (
-        <div className="flex-col-center new-game-menu play-game">
+        <div className="main-horizontal-content play-game">
             <div className="play-game-grid play-game-top-menu  flex-row-space-between">
                 <img src={logo} aria-label="logo" />
                 <PlayerTurnIndicator playerTurn={playerTurn} />
