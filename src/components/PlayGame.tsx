@@ -38,27 +38,25 @@ export const PlayGame = ({}: PlayGameProps) => {
             <div className="play-game-grid play-game-top-menu  flex-row-space-between">
                 {' '}
                 <img src={logo} aria-label="logo" />
-                <div className="player-turn-indicator-box bg-semi-dark-navy box-shadow-semi-dark-navy-sm">
-                    <div className="player-turn-indicator-group">
-                        <div className="token-image-filter-silver">
-                            {playerTurn === 1 ? (
-                                <img
-                                    className="player-turn-mark"
-                                    src={xTokenImage}
-                                    aria-label={'x-mark'}
-                                />
-                            ) : (
-                                <img
-                                    className="player-turn-mark"
-                                    src={oTokenImage}
-                                    aria-label={'x-mark'}
-                                />
-                            )}
-                        </div>
-                        <p className="play-turn-heading upper-text"> Turn</p>
+                <div className="play-game-top-menu-expanding-element bg-semi-dark-navy box-shadow-semi-dark-navy-sm">
+                    <div className="token-image-filter-silver">
+                        {playerTurn === 1 ? (
+                            <img
+                                className="player-turn-mark"
+                                src={xTokenImage}
+                                aria-label={'x-mark'}
+                            />
+                        ) : (
+                            <img
+                                className="player-turn-mark"
+                                src={oTokenImage}
+                                aria-label={'x-mark'}
+                            />
+                        )}
+                        <p className="player-turn-heading upper-text"> Turn</p>
                     </div>
                 </div>
-                <button className="play-game-reload bg-silver box-shadow-silver-sm border-radius-5">
+                <button className="play-game-reload play-game-top-menu-expanding-element bg-silver box-shadow-silver-sm">
                     <p className="heading-xs">↻</p>
                 </button>
             </div>
