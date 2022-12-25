@@ -11,6 +11,9 @@
 # production
 /build
 
+# js files built by typescript compiler
+/src/js/*
+
 # misc
 .DS_Store
 .env.local
