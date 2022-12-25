@@ -3,14 +3,20 @@ import { GameInstance } from './gameInstance';
 export class SinglePlayerGameInstance extends GameInstance {
     takeTurn = (row: number, col: number, playerNumber: number) => {
         if (this.game.placeMark(row, col, playerNumber)) {
-            console.log('Computer is going for player 2...');
-            if (this.placeComputerMark()) {
-                return true;
+            if (this.victoryConditionFound(playerNumber)) {
+                return playerNumber;
+            } else if (this.placeComputerMark()) {
+                // TODO: Don't hardcode computer's player number
+                if (this.victoryConditionFound(2)) {
+                    return 2;
+                } else {
+                    return 0;
+                }
             }
 
-            return false;
+            return -1;
         } else {
-            return false;
+            return -1;
         }
     };
 
