@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import { PlayGame } from './components/PlayGame';
 import { NewGameMenu } from './components/NewGameMenu';
-import { gameModes, gameSettings } from '../../lib';
+import { gameModes, gameSettings } from '../shared/lib';
 import { socket } from './socket';
 
 import './App.css';

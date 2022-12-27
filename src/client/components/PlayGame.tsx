@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { PlayerTurnIndicator } from './PlayerTurnIndicator';
 import { Gameboard } from './Gameboard';
 import { ScoreCard } from './ScoreCard';
-import { gameMode } from '../lib';
+import { gameMode } from '../../shared/lib';
 
 import logo from '../assets/logo.svg';
 import { socket } from '../socket';

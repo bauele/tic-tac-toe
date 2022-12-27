@@ -4,9 +4,9 @@ import { GameInstance } from './gameInstance';
 import { SinglePlayerGameInstance } from './singlePlayerGameInstance';
 import { LocalMultiplayerGameInstance } from './localMultiplayerGameInstance';
 
-import { gameModes, gameSettings } from '../../../client/src/lib';
+import { gameModes, gameSettings } from '../../../shared/lib';
 
-const serverConfig = require('../config.json');
+import serverConfig from '../../../config.json';
 
 let gameInstances = new Array<GameInstance>();
 

@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Switch } from './Switch';
 import { Button } from './Button';
-import { gameModes, gameSettings } from '../lib';
+import { gameModes, gameSettings } from '../../shared/lib';
 
 import xTokenImage from '../assets/icon-x.svg';
 import oTokenImage from '../assets/icon-o.svg';
