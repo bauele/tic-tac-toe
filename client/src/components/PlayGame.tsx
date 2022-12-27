@@ -6,8 +6,7 @@ import { ScoreCard } from './ScoreCard';
 import { gameMode } from '../lib';
 
 import logo from '../assets/logo.svg';
-
-import { io } from 'socket.io-client';
+import { socket } from '../socket';
 
 type PlayGameProps = {
     gameMode: gameMode;
@@ -15,20 +14,15 @@ type PlayGameProps = {
 };
 
 export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
+    socket.emit('');
+
     const [board, setBoard] = useState([
         [0, 0, 0],
         [0, 0, 0],
         [0, 0, 0],
     ]);
-    const [connected, setConnected] = useState(false);
-    let socket;
 
-    useEffect(() => {
-        if (!connected) {
-            socket = io('http://localhost:3001');
-            setConnected(true);
-        }
-    }, []);
+    useEffect(() => {}, []);
 
     const [playerTurn, setPlayerTurn] = useState(1);
 

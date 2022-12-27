@@ -4,6 +4,8 @@ import { GameInstance } from './gameInstance';
 import { SinglePlayerGameInstance } from './singlePlayerGameInstance';
 import { LocalMultiplayerGameInstance } from './localMultiplayerGameInstance';
 
+const serverConfig = require('../config.json');
+
 let gameInstances = new Array<GameInstance>();
 
 let singlePlayerGame = new SinglePlayerGameInstance('game-1');
@@ -26,5 +28,5 @@ io.on('connection', (socket) => {
     console.log('New connection established');
 });
 
-console.log('Listening on port...');
-io.listen(3001);
+console.log(`Listening on port ${serverConfig.host.port}`);
+io.listen(serverConfig.host.port);
