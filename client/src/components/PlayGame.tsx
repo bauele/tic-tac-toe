@@ -14,15 +14,11 @@ type PlayGameProps = {
 };
 
 export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
-    socket.emit('');
-
     const [board, setBoard] = useState([
         [0, 0, 0],
         [0, 0, 0],
         [0, 0, 0],
     ]);
-
-    useEffect(() => {}, []);
 
     const [playerTurn, setPlayerTurn] = useState(1);
 

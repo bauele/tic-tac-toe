@@ -3,7 +3,8 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import { PlayGame } from './components/PlayGame';
 import { NewGameMenu } from './components/NewGameMenu';
-import { gameModes, gameMode, gameSettings } from './lib';
+import { gameModes, gameSettings } from '../../lib';
+import { socket } from './socket';
 
 import './App.css';
 
@@ -17,6 +18,7 @@ function App() {
             setGameMode(mode);
             setPlayerMark(mark);
             navigate('/play');
+            socket.emit('new-game', { mark, mode });
         } else {
             alert('Invalid game mode');
         }

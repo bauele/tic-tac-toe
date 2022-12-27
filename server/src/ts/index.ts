@@ -4,28 +4,39 @@ import { GameInstance } from './gameInstance';
 import { SinglePlayerGameInstance } from './singlePlayerGameInstance';
 import { LocalMultiplayerGameInstance } from './localMultiplayerGameInstance';
 
+import { gameModes, gameSettings } from '../../../client/src/lib';
+
 const serverConfig = require('../config.json');
 
 let gameInstances = new Array<GameInstance>();
 
-let singlePlayerGame = new SinglePlayerGameInstance('game-1');
 let localMultiplayerGame = new LocalMultiplayerGameInstance('game-2');
-
-gameInstances.push(singlePlayerGame);
-gameInstances.push(localMultiplayerGame);
-
-gameInstances.forEach((game) => {
-    game.takeTurn(0, 0, 1);
-    console.log(game.getBoard());
-});
 
 const io = new Server({
     cors: {
         origin: ['http://localhost:3000', '*'],
     },
 });
+
 io.on('connection', (socket) => {
-    console.log('New connection established');
+    console.log(`New connection established: ${socket.id}`);
+
+    socket.on('disconnect', (reason) => {
+        console.log(`Socket disconnected for ${reason}`);
+    });
+
+    socket.on('new-game', (gameConfig: gameSettings) => {
+        console.log('new-game: ', gameConfig);
+        switch (gameConfig.mode) {
+            case 'singlePlayer':
+                let singlePlayerGame = new SinglePlayerGameInstance(socket.id);
+                gameInstances.push(singlePlayerGame);
+                break;
+            default:
+                console.log('Default case triggered');
+                break;
+        }
+    });
 });
 
 console.log(`Listening on port ${serverConfig.host.port}`);
