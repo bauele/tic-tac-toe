@@ -3,12 +3,16 @@ import { useState } from 'react';
 import { PlayerTurnIndicator } from './PlayerTurnIndicator';
 import { Gameboard } from './Gameboard';
 import { ScoreCard } from './ScoreCard';
+import { gameModes, gameMode } from '../lib';
 
 import logo from '../assets/logo.svg';
 
-type PlayGameProps = {};
+type PlayGameProps = {
+    gameMode: gameMode;
+    playerMark: number;
+};
 
-export const PlayGame = ({}: PlayGameProps) => {
+export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     const [board, setBoard] = useState([
         [0, 0, 0],
         [0, 0, 0],

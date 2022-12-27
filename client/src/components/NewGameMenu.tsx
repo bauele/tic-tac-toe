@@ -2,12 +2,17 @@ import { useState } from 'react';
 
 import { Switch } from './Switch';
 import { Button } from './Button';
+import { gameModes, gameSettings } from '../lib';
 
 import xTokenImage from '../assets/icon-x.svg';
 import oTokenImage from '../assets/icon-o.svg';
 
-export const NewGameMenu = () => {
-    const [selectedSwitch, setSelectedSwitch] = useState(0);
+type NewGameMenuProps = {
+    gameModeButtonOnClick: ({ mark, mode }: gameSettings) => void;
+};
+
+export const NewGameMenu = (props: NewGameMenuProps) => {
+    const [selectedMark, setSelectedMark] = useState(0);
 
     return (
         <div className="main-horizontal-content new-game-menu">
@@ -29,7 +34,7 @@ export const NewGameMenu = () => {
                 <div className="new-game-switch-box flex-row-center">
                     <Switch
                         className="new-game-switch-box-inner border-radius-10"
-                        selected={selectedSwitch}
+                        selected={selectedMark}
                         optionOne={
                             <img
                                 className="token-image-logo"
@@ -50,7 +55,7 @@ export const NewGameMenu = () => {
                             selected:
                                 'switch-option switch-radio-accessibiltiy token-image-filter-dark-navy',
                         }}
-                        onChange={setSelectedSwitch}
+                        onChange={setSelectedMark}
                     />
                 </div>
                 <p className="new-game-p-text body upper-text opacity-50 ">
@@ -62,11 +67,23 @@ export const NewGameMenu = () => {
                     className={
                         'new-game-button bg-light-yellow border-radius-15 box-shadow-light-yellow heading-xs upper-text'
                     }
+                    onClick={() =>
+                        props.gameModeButtonOnClick({
+                            mark: selectedMark,
+                            mode: gameModes[0],
+                        })
+                    }
                     text="New Game (VS CPU)"
                 />
                 <Button
                     className={
                         'new-game-button bg-light-blue border-radius-15 box-shadow-light-blue heading-xs upper-text'
+                    }
+                    onClick={() =>
+                        props.gameModeButtonOnClick({
+                            mark: selectedMark,
+                            mode: gameModes[1],
+                        })
                     }
                     text="New Game (VS Player)"
                 />
