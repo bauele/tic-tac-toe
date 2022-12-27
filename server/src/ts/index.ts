@@ -1,3 +1,5 @@
+import { Server } from 'socket.io';
+
 import { GameInstance } from './gameInstance';
 import { SinglePlayerGameInstance } from './singlePlayerGameInstance';
 import { LocalMultiplayerGameInstance } from './localMultiplayerGameInstance';
@@ -14,3 +16,15 @@ gameInstances.forEach((game) => {
     game.takeTurn(0, 0, 1);
     console.log(game.getBoard());
 });
+
+const io = new Server({
+    cors: {
+        origin: ['http://localhost:3000', '*'],
+    },
+});
+io.on('connection', (socket) => {
+    console.log('New connection established');
+});
+
+console.log('Listening on port...');
+io.listen(3001);

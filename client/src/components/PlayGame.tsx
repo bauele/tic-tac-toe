@@ -1,11 +1,13 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { PlayerTurnIndicator } from './PlayerTurnIndicator';
 import { Gameboard } from './Gameboard';
 import { ScoreCard } from './ScoreCard';
-import { gameModes, gameMode } from '../lib';
+import { gameMode } from '../lib';
 
 import logo from '../assets/logo.svg';
+
+import { io } from 'socket.io-client';
 
 type PlayGameProps = {
     gameMode: gameMode;
@@ -18,6 +20,15 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         [0, 0, 0],
         [0, 0, 0],
     ]);
+    const [connected, setConnected] = useState(false);
+    let socket;
+
+    useEffect(() => {
+        if (!connected) {
+            socket = io('http://localhost:3001');
+            setConnected(true);
+        }
+    }, []);
 
     const [playerTurn, setPlayerTurn] = useState(1);
 
