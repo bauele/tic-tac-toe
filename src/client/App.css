@@ -225,12 +225,12 @@
     gap: 8px;
 }
 
-.overlay-box-main-text-only h1 {
+.overlay-box-main-text-only .overlay-main-text-container {
     margin-top: 61px;
     margin-bottom: 24px;
 }
 
-.overlay-box-main-and-sub-texts h1 {
+.overlay-box-main-and-sub-texts .overlay-main-text-container {
     margin-top: 16px;
     margin-bottom: 24px;
 }
@@ -597,9 +597,26 @@
         letter-spacing: 2.5px;
     }
 
-    .overlay-box-main-text-only h1 {
+    .overlay-box-main-text-only .overlay-main-text-container {
         margin-top: 67px;
         margin-bottom: 31px;
+        gap: 24px;
+    }
+
+    .overlay-box-main-and-sub-texts .overlay-main-text-container {
+        gap: 24px;
+    }
+
+    .overlay-main-image {
+        width: 64px;
+        height: 64px;
+    }
+
+    .overlay-sub-text {
+        font-size: 16px;
+        line-height: 20px;
+        text-align: center;
+        letter-spacing: 1px;
     }
 
     .overlay-box-main-and-sub-texts h2 {

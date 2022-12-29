@@ -65,7 +65,9 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 <ScoreCard color="light-yellow" heading="O (CPU)" score={0} />
             </div>
             <OverlayBox
-                mainText="Restart Game?"
+                subText="Oh, I missed!"
+                mainText="Takes the round!"
+                mainImage={xTokenImage}
                 buttonOneText="No, Cancel"
                 buttonTwoText="Yes, Restart"
             ></OverlayBox>
