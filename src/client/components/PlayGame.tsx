@@ -97,6 +97,24 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     };
 
     const showOverlayBoxVictory = (winningPlayer: number) => {
+        const subtextString = () => {
+            if (gameMode === 'singlePlayer') {
+                if (
+                    (winningPlayer === 1 && playerMark === 0) ||
+                    (winningPlayer === 2 && playerMark === 1)
+                ) {
+                    return 'You won!';
+                } else {
+                    return 'Oh no, you lost...';
+                }
+            } else {
+                if (winningPlayer === 1) {
+                    return 'Player 1 wins!';
+                } else {
+                    return 'Player 2 wins!';
+                }
+            }
+        };
         if (winningPlayer === 1 || winningPlayer === 2) {
             const overlayBox = {
                 visible: true,
@@ -108,7 +126,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                         : winningPlayer === 2
                         ? `${oTokenImage}`
                         : '',
-                subText: `Player ${winningPlayer} wins!`,
+                subText: subtextString(),
 
                 mainText: 'Takes the round!',
                 buttonOneText: 'Quit',
