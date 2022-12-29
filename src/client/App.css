@@ -208,6 +208,85 @@
     animation-fill-mode: forwards;
 }
 
+.overlay-box {
+    position: absolute;
+    width: 100vw;
+    height: 228px;
+
+    top: calc((100vh - min(34vh, 266px)) / 2);
+
+    background-color: var(--semi-dark-navy);
+}
+
+.overlay-main-text-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+}
+
+.overlay-box-main-text-only h1 {
+    margin-top: 61px;
+    margin-bottom: 24px;
+}
+
+.overlay-box-main-and-sub-texts h1 {
+    margin-top: 16px;
+    margin-bottom: 24px;
+}
+.overlay-box-main-and-sub-texts h2 {
+    margin-top: 40px;
+}
+
+.overlay-main-text {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 30px;
+    letter-spacing: 1.5px;
+
+    margin: 0px;
+}
+
+.overlay-main-image {
+    width: 30px;
+    height: 30px;
+}
+
+.overlay-sub-text {
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+    line-height: 18px;
+
+    text-align: center;
+    letter-spacing: 0.875px;
+
+    margin-top: 40px;
+    margin-bottom: 0px;
+}
+
+.overlay-button-container {
+    gap: 16px;
+}
+
+.overlay-button {
+    border: none;
+    font-family: 'Outfit';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 1px;
+    color: var(--dark-navy);
+    max-height: 54px;
+
+    padding: 0px 17px;
+}
+
 /*  Game classes */
 .play-game {
     display: flex;
@@ -433,6 +512,10 @@
     box-shadow: inset 0px -8px 0px var(--light-yellow-shadow);
 }
 
+.box-shadow-light-yellow-sm {
+    box-shadow: inset 0px -4px 0px var(--light-yellow-shadow);
+}
+
 .box-shadow-light-blue {
     box-shadow: inset 0px -8px 0px var(--light-blue-shadow);
 }
@@ -502,5 +585,24 @@
         font-size: 24px;
         line-height: 30.24px;
         letter-spacing: 1.5px;
+    }
+
+    .overlay-box {
+        height: 266px;
+    }
+
+    .overlay-main-text {
+        font-size: 40px;
+        line-height: 50px;
+        letter-spacing: 2.5px;
+    }
+
+    .overlay-box-main-text-only h1 {
+        margin-top: 67px;
+        margin-bottom: 31px;
+    }
+
+    .overlay-box-main-and-sub-texts h2 {
+        margin-top: 45px;
     }
 }

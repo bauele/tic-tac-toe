@@ -3,8 +3,10 @@ import { useEffect, useState } from 'react';
 import { PlayerTurnIndicator } from './PlayerTurnIndicator';
 import { Gameboard } from './Gameboard';
 import { ScoreCard } from './ScoreCard';
+import { OverlayBox } from './OverlayBox';
 import { gameMode } from '../../shared/lib';
 
+import xTokenImage from '../assets/icon-x.svg';
 import logo from '../assets/logo.svg';
 import { socket } from '../socket';
 
@@ -62,6 +64,11 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 <ScoreCard color="silver" heading="Ties" score={0} />
                 <ScoreCard color="light-yellow" heading="O (CPU)" score={0} />
             </div>
+            <OverlayBox
+                mainText="Restart Game?"
+                buttonOneText="No, Cancel"
+                buttonTwoText="Yes, Restart"
+            ></OverlayBox>
         </div>
     );
 };
