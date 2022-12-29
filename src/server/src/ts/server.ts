@@ -22,7 +22,7 @@ export const createGame = ({ mark, mode }: gameSettings) => {
     let game: GameInstance | null;
 
     // TODO: Allow for players to set custom names
-    let player = { name: 'player one', mark: mark };
+    let player = { name: 'player one', mark: mark, gameId: id };
 
     switch (mode) {
         case 'singlePlayer':
