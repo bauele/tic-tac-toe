@@ -1,6 +1,16 @@
-import { GameInstance } from './gameInstance';
+import { GameInstance, Player } from './gameInstance';
 
 export class SinglePlayerGameInstance extends GameInstance {
+    constructor(gameId: string, player: Player) {
+        super(gameId, player);
+
+        /*  If the human player is not going first, the computer
+            should immediately take their turn after game creation */
+        if (player.mark !== 1) {
+            this.placeComputerMark();
+        }
+    }
+
     takeTurn = (row: number, col: number, playerNumber: number) => {
         if (this.game.placeMark(row, col, playerNumber)) {
             if (this.victoryConditionFound(playerNumber)) {

@@ -18,7 +18,10 @@ function App() {
             setGameMode(mode);
             setPlayerMark(mark);
             navigate('/play');
-            socket.emit('new-game', { mark, mode });
+
+            /*  Adding 1 to mark is necessary to translate the Switch
+                component's off/on values from 0-1 to 1-2 for the server */
+            socket.emit('new-game', { mark: mark + 1, mode });
         } else {
             alert('Invalid game mode');
         }

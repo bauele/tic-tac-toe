@@ -1,13 +1,26 @@
 import { TicTacToeGame } from './ticTacToeGame';
 
+export interface Player {
+    name: string;
+    mark: number;
+}
+
 export abstract class GameInstance {
     protected readonly gameId: string;
     protected readonly game = new TicTacToeGame();
-    protected readonly players = new Array<string>();
+    protected readonly players = new Array<Player>();
     protected readonly chatMessages = new Array<string>();
 
-    constructor(gameId: string) {
+    // Variable indicating which mark will take the first turn
+    protected readonly firstTurn: number;
+
+    constructor(gameId: string, player: Player) {
         this.gameId = gameId;
+
+        /*  When a new game is created, the X mark will always go first.
+            On subsequent game resets, the mark going first will alternate */
+        this.firstTurn = 1;
+        this.players.push(player);
     }
 
     /*  This function must be overidden to indicate how sub game types
@@ -16,6 +29,14 @@ export abstract class GameInstance {
                      0 if turn was taken successfully
                      playerNumber if said player's turn caused them to win */
     abstract takeTurn(row: number, col: number, playerNumber: number): number;
+
+    addPlayer = (player: Player) => {
+        this.players.push(player);
+    };
+
+    getId = () => {
+        return this.gameId;
+    };
 
     placeMark = (row: number, col: number, playerNumber: number) => {
         return this.game.placeMark(row, col, playerNumber);

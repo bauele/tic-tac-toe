@@ -3,9 +3,11 @@ import { describe, it, expect } from '@jest/globals';
 import { LocalMultiplayerGameInstance } from '../src/ts/localMultiplayerGameInstance';
 
 describe('single player game instance', () => {
+    const player = { name: 'player-one', mark: 1 };
     it('should initially have an empty board', () => {
         const localMultiplayerGameInstance = new LocalMultiplayerGameInstance(
-            'game-id'
+            'game-id',
+            player
         );
 
         expect(localMultiplayerGameInstance.getBoard()).toEqual([
@@ -16,8 +18,10 @@ describe('single player game instance', () => {
     });
 
     it('should have player 2 take a turn right after player 1', () => {
+        const player = { name: 'player-one', mark: 1 };
         const localMultiplayerGameInstance = new LocalMultiplayerGameInstance(
-            'game-id'
+            'game-id',
+            player
         );
 
         expect(localMultiplayerGameInstance.takeTurn(2, 1, 1)).toEqual(0);
@@ -28,8 +32,10 @@ describe('single player game instance', () => {
     });
 
     it('should detect a horizontal victory from player 1', () => {
+        const player = { name: 'player-one', mark: 1 };
         const localMultiplayerGameInstance = new LocalMultiplayerGameInstance(
-            'game-id'
+            'game-id',
+            player
         );
 
         expect(localMultiplayerGameInstance.takeTurn(0, 0, 1)).toEqual(0);

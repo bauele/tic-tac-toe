@@ -5,6 +5,4 @@ const url = `${serverConfig.host.protocol}://${serverConfig.host.hostname}:${ser
 
 export const socket = io(url);
 
-socket.on('connect', () => {
-    console.log(socket.id);
-});
+socket.on('connect', () => {});

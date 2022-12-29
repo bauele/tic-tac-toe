@@ -23,20 +23,29 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     const [playerTurn, setPlayerTurn] = useState(1);
 
     const updateBoard = (position: [number, number]) => {
-        /*  Check if space on the board is available 
-            TODO: This should eventually be replaced with an API call and the
-            server will determine if the space is available or not */
-        if (board[position[0]][position[1]] === 0) {
-            let currentBoard = board;
-            currentBoard[position[0]][position[1]] = playerTurn;
-            setBoard(currentBoard);
-            updatePlayerTurn();
-        }
+        // Disconnect listeners to avoid multiple triggers
+        socket.off('board-update');
+        socket.off('game-won');
+
+        socket.emit('gameboard-click', position);
+        socket.on('board-update', (board) => {
+            setBoard(board);
+        });
+
+        socket.on('game-won', (result) => {
+            alert(`Player ${result} wins!`);
+        });
     };
 
     const updatePlayerTurn = () => {
         setPlayerTurn(playerTurn === 1 ? 2 : 1);
     };
+
+    useEffect(() => {
+        socket.on('board-update', (board) => {
+            setBoard(board);
+        });
+    }, []);
 
     return (
         <div className="main-horizontal-content play-game">
