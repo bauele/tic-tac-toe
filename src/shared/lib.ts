@@ -9,3 +9,11 @@ export interface gameSettings {
     mark: number;
     mode: gameMode;
 }
+
+export interface VictoryPosition {
+    location: [
+        { i: number; j: number },
+        { i: number; j: number },
+        { i: number; j: number }
+    ];
+}

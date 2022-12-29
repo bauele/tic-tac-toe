@@ -371,8 +371,8 @@
 }
 
 .gameboard-token {
-    width: 64px;
-    height: 64px;
+    width: 40px;
+    height: 40px;
 }
 
 .player-turn-indicator-box {
@@ -632,5 +632,10 @@
 
     .overlay-box-main-and-sub-texts h2 {
         margin-top: 45px;
+    }
+
+    .gameboard-token {
+        width: 64px;
+        height: 64px;
     }
 }

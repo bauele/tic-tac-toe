@@ -26,6 +26,7 @@ export class SinglePlayerGameInstance extends GameInstance {
         this.playerTurn = this.firstTurn;
 
         this.game = new TicTacToeGame();
+        this.setVictoryPosition(new Array<{ i: number; j: number }>());
 
         /*  If the human player is not going first, the computer
             should immediately take their turn after game creation */

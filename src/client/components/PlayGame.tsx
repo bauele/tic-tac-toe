@@ -63,6 +63,9 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         buttonTwoOnClick: () => {},
     });
     const [playerTurn, setPlayerTurn] = useState(1);
+    const [victoryPosition, setVictoryPosition] = useState(
+        new Array<{ i: number; j: number }>()
+    );
 
     const updateBoard = (position: [number, number]) => {
         // Disconnect listeners to avoid multiple triggers
@@ -77,22 +80,27 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             }
         });
 
-        socket.on('game-won', (result: number) => {
-            if (result === 1) {
-                let currentScore = score;
-                currentScore.xWins++;
-                setScore(currentScore);
-            } else if (result === 2) {
-                let currentScore = score;
-                currentScore.oWins++;
-                setScore(currentScore);
-            } else if (result === 3) {
-                let currentScore = score;
-                currentScore.ties++;
-                setScore(currentScore);
+        socket.on(
+            'game-won',
+            (result: number, victoryPosition: { i: number; j: number }[]) => {
+                setVictoryPosition(victoryPosition);
+
+                if (result === 1) {
+                    let currentScore = score;
+                    currentScore.xWins++;
+                    setScore(currentScore);
+                } else if (result === 2) {
+                    let currentScore = score;
+                    currentScore.oWins++;
+                    setScore(currentScore);
+                } else if (result === 3) {
+                    let currentScore = score;
+                    currentScore.ties++;
+                    setScore(currentScore);
+                }
+                showOverlayBoxVictory(result);
             }
-            showOverlayBoxVictory(result);
-        });
+        );
     };
 
     const updatePlayerTurn = () => {
@@ -139,6 +147,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 buttonTwoText: 'Next Round',
                 buttonTwoOnClick: () => {
                     socket.emit('reset-board');
+                    setVictoryPosition([]);
                     const disableOverlay = overlayBox;
                     overlayBox.visible = false;
                     setOverlayBox(disableOverlay);
@@ -219,7 +228,11 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                     <p className="heading-xs">↻</p>
                 </button>
             </div>
-            <Gameboard board={board} onUpdate={updateBoard} />
+            <Gameboard
+                board={board}
+                onUpdate={updateBoard}
+                victoryPosition={victoryPosition}
+            />
             <div className="play-game-grid play-game-score-cards">
                 <ScoreCard
                     color="light-blue"

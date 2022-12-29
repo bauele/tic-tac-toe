@@ -7,6 +7,7 @@ export abstract class GameInstance {
     protected game = new TicTacToeGame();
     protected readonly players = new Array<Player>();
     protected readonly chatMessages = new Array<string>();
+    protected victoryPosition = new Array<{ i: number; j: number }>();
 
     // Variable indicating which mark will take the first turn
     protected firstTurn: number;
@@ -52,11 +53,20 @@ export abstract class GameInstance {
         return this.playerTurn;
     };
 
+    getVictoryPosition = () => {
+        return this.victoryPosition;
+    };
+
+    setVictoryPosition = (victoryPosition: { i: number; j: number }[]) => {
+        this.victoryPosition = victoryPosition;
+    };
+
     resetGame = () => {
         // The other player will go first upon game reset
         this.firstTurn = this.firstTurn === 1 ? 2 : 1;
         this.playerTurn = this.firstTurn;
 
+        this.setVictoryPosition(new Array<{ i: number; j: number }>());
         this.game = new TicTacToeGame();
     };
 
@@ -71,8 +81,14 @@ export abstract class GameInstance {
                 board[i][0] == playerNumber &&
                 board[i][1] == playerNumber &&
                 board[i][2] == playerNumber
-            )
+            ) {
+                this.setVictoryPosition([
+                    { i: i, j: 0 },
+                    { i: i, j: 1 },
+                    { i: i, j: 2 },
+                ]);
                 return true;
+            }
         }
 
         // Check vertical victories
@@ -81,8 +97,14 @@ export abstract class GameInstance {
                 board[0][j] == playerNumber &&
                 board[1][j] == playerNumber &&
                 board[2][j] == playerNumber
-            )
+            ) {
+                this.setVictoryPosition([
+                    { i: 0, j: j },
+                    { i: 1, j: j },
+                    { i: 2, j: j },
+                ]);
                 return true;
+            }
         }
 
         // Check diagonal victories
@@ -90,15 +112,27 @@ export abstract class GameInstance {
             board[0][0] == playerNumber &&
             board[1][1] == playerNumber &&
             board[2][2] == playerNumber
-        )
+        ) {
+            this.setVictoryPosition([
+                { i: 0, j: 0 },
+                { i: 1, j: 1 },
+                { i: 2, j: 2 },
+            ]);
             return true;
+        }
 
         if (
             board[2][0] == playerNumber &&
             board[1][1] == playerNumber &&
             board[0][2] == playerNumber
-        )
+        ) {
+            this.setVictoryPosition([
+                { i: 2, j: 0 },
+                { i: 1, j: 1 },
+                { i: 0, j: 2 },
+            ]);
             return true;
+        }
 
         return false;
     };

@@ -85,7 +85,8 @@ io.on('connection', (socket) => {
                 /*  If turnResult is a 1 or 2, one of the players have won
                     the game. If it's 3, there was a tie */
                 if (turnResult === 1 || turnResult === 2 || turnResult === 3) {
-                    socket.emit('game-won', turnResult);
+                    const victoryPosition = game.getVictoryPosition();
+                    socket.emit('game-won', turnResult, victoryPosition);
                 }
             } else {
                 console.log("Unable to locate player's game");
