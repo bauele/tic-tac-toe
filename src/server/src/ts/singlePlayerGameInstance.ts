@@ -1,8 +1,14 @@
-import { GameInstance, Player } from './gameInstance';
+import { GameInstance } from './gameInstance';
+import { Player } from './player';
 
 export class SinglePlayerGameInstance extends GameInstance {
     constructor(gameId: string, player: Player) {
         super(gameId, player);
+        this.players.push({
+            name: 'CPU',
+            mark: player.mark === 1 ? 2 : 1,
+            gameId: this.gameId,
+        });
 
         /*  If the human player is not going first, the computer
             should immediately take their turn after game creation */
@@ -16,9 +22,10 @@ export class SinglePlayerGameInstance extends GameInstance {
             if (this.victoryConditionFound(playerNumber)) {
                 return playerNumber;
             } else if (this.placeComputerMark()) {
-                // TODO: Don't hardcode computer's player number
-                if (this.victoryConditionFound(2)) {
-                    return 2;
+                /*  In a singleplayer game, the computer will always be
+                    the second player in the player's array */
+                if (this.victoryConditionFound(this.players[1].mark)) {
+                    return this.players[1].mark;
                 } else {
                     return 0;
                 }
@@ -36,7 +43,9 @@ export class SinglePlayerGameInstance extends GameInstance {
         for (let i = 0; i < 3; i++) {
             for (let j = 0; j < 3; j++) {
                 if (this.game.getBoard()[i][j] === 0) {
-                    return this.game.placeMark(i, j, 2);
+                    /*  In a singleplayer game, the computer will always be
+                    the second player in the player's array */
+                    return this.game.placeMark(i, j, this.players[1].mark);
                 }
             }
         }

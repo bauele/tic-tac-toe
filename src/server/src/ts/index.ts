@@ -2,11 +2,13 @@ import { Server } from 'socket.io';
 
 import { GameInstance } from './gameInstance';
 import { createGame } from './server';
+import { Player } from './player';
+
 import { gameSettings } from '../../../shared/lib';
 import serverConfig from '../../../config.json';
 
-// Map connecting client socket ids to game ids
-const socketGameMap = new Map<string, string>();
+// Map connecting client socket ids to players
+const socketGameMap = new Map<string, Player>();
 
 // Map connecting game ids to GameInstance objects
 const gameIdMap = new Map<string, GameInstance>();
@@ -35,7 +37,14 @@ io.on('connection', (socket) => {
             const game = createGame(gameConfig);
             if (game) {
                 console.log(`Game created with id ${game.getId()}`);
-                socketGameMap.set(socket.id, game.getId());
+
+                // TODO: Allow players to set names
+                const player = {
+                    name: 'default-name',
+                    mark: gameConfig.mark,
+                    gameId: game.getId(),
+                };
+                socketGameMap.set(socket.id, player);
                 gameIdMap.set(game.getId(), game);
 
                 /*  If the player starts a singleplayer game and they are not using
@@ -52,11 +61,17 @@ io.on('connection', (socket) => {
         console.log(`\n${socket.id} clicked game board at ${position}`);
 
         // Find game the player is connected to
-        const gameId = socketGameMap.get(socket.id);
-        if (gameId) {
-            const game = gameIdMap.get(gameId);
+        const player = socketGameMap.get(socket.id);
+        if (player) {
+            const game = gameIdMap.get(player.gameId);
             if (game) {
-                const turnResult = game.takeTurn(position[0], position[1], 1);
+                // TODO: Determine if it is actually their turn
+
+                const turnResult = game.takeTurn(
+                    position[0],
+                    position[1],
+                    player.mark
+                );
                 socket.emit('board-update', game.getBoard());
 
                 /*  If turnResult is a 1 or 2, one of the players have won
@@ -65,11 +80,11 @@ io.on('connection', (socket) => {
                     socket.emit('game-won', turnResult);
                 }
             } else {
-                console.log(`Unable to locate game with id ${gameId}`);
+                console.log("Unable to locate player's game");
                 // TODO: Send error back to client
             }
         } else {
-            console.log("Unable to locate player's game");
+            console.log('Unable to locate player');
             // TODO: Send error back to client
         }
     });
