@@ -6,7 +6,9 @@ type OverlayBoxProps = {
     mainImage?: string;
     subText?: string;
     buttonOneText: string;
+    buttonOneOnClick?: Function;
     buttonTwoText: string;
+    buttonTwoOnClick?: Function;
 };
 
 export const OverlayBox = ({
@@ -14,6 +16,8 @@ export const OverlayBox = ({
     mainImage = '',
     subText = '',
     buttonOneText,
+    buttonOneOnClick,
+    buttonTwoOnClick,
     buttonTwoText,
 }: OverlayBoxProps) => {
     const overlayBoxPositioning = () => {
