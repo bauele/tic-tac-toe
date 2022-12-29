@@ -24,6 +24,19 @@ io.on('connection', (socket) => {
 
     socket.on('disconnect', (reason) => {
         console.log(`Socket disconnected for ${reason}`);
+
+        // Delete player's game
+        const player = socketGameMap.get(socket.id);
+        if (player) {
+            if (gameIdMap.delete(player.gameId)) {
+                console.log(`Deleted ${socket.id}'s game`);
+            } else {
+                console.log(`Error: failed to deleted ${socket.id}'s game`);
+            }
+
+            // Delete player's socket
+            socketGameMap.delete(socket.id);
+        }
     });
 
     socket.on('new-game', (gameConfig: gameSettings) => {
@@ -50,7 +63,6 @@ io.on('connection', (socket) => {
                 /*  If the player starts a singleplayer game and they are not using
                     the X mark, the computer will take their turn immediately.
                     The board state needs to be sent back to the client */
-                console.log('gameplayerturn = ', game.getPlayerTurn());
                 socket.emit(
                     'board-update',
                     game.getBoard(),
