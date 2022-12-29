@@ -12,7 +12,7 @@ export abstract class GameInstance {
     protected readonly firstTurn: number;
 
     // Variable indicating which player must take their turn next
-    protected readonly playerTurn: number;
+    protected playerTurn: number;
 
     constructor(gameId: string, player: Player) {
         this.gameId = gameId;
@@ -46,6 +46,10 @@ export abstract class GameInstance {
 
     getBoard = () => {
         return this.game.getBoard();
+    };
+
+    getPlayerTurn = () => {
+        return this.playerTurn;
     };
 
     victoryConditionFound = (playerNumber: number) => {

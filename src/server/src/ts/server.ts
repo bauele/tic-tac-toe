@@ -2,6 +2,7 @@ const uuid = require('uuid');
 
 import { GameInstance } from './gameInstance';
 import { SinglePlayerGameInstance } from './singlePlayerGameInstance';
+import { LocalMultiplayerGameInstance } from './localMultiplayerGameInstance';
 import { gameModes, gameSettings } from '../../../shared/lib';
 
 /*  Creates a new game based on supplied settings.
@@ -27,6 +28,9 @@ export const createGame = ({ mark, mode }: gameSettings) => {
     switch (mode) {
         case 'singlePlayer':
             game = new SinglePlayerGameInstance(id, player);
+            break;
+        case 'localMultiplayer':
+            game = new LocalMultiplayerGameInstance(id, player);
             break;
         default:
             game = null;

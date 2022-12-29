@@ -4,7 +4,7 @@ import { GameInstance } from './gameInstance';
 import { createGame } from './server';
 import { Player } from './player';
 
-import { gameSettings } from '../../../shared/lib';
+import { gameModes, gameSettings } from '../../../shared/lib';
 import serverConfig from '../../../config.json';
 
 // Map connecting client socket ids to players
@@ -40,7 +40,7 @@ io.on('connection', (socket) => {
 
                 // TODO: Allow players to set names
                 const player = {
-                    name: 'default-name',
+                    name: 'default-player',
                     mark: gameConfig.mark,
                     gameId: game.getId(),
                 };
@@ -65,13 +65,12 @@ io.on('connection', (socket) => {
         if (player) {
             const game = gameIdMap.get(player.gameId);
             if (game) {
-                // TODO: Determine if it is actually their turn
-
                 const turnResult = game.takeTurn(
                     position[0],
                     position[1],
                     player.mark
                 );
+
                 socket.emit('board-update', game.getBoard());
 
                 /*  If turnResult is a 1 or 2, one of the players have won
