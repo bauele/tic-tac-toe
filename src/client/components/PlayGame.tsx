@@ -30,6 +30,12 @@ interface OverlayBox {
     buttonTwoOnClick?: Function;
 }
 
+interface Score {
+    xWins: 0;
+    oWins: 0;
+    ties: 0;
+}
+
 export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     const navigate = useNavigate();
 
@@ -38,6 +44,12 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         [0, 0, 0],
         [0, 0, 0],
     ]);
+
+    const [score, setScore] = useState({
+        xWins: 0,
+        oWins: 0,
+        ties: 0,
+    });
 
     const [overlayBox, setOverlayBox] = useState({
         visible: false,
@@ -63,7 +75,19 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         });
 
         socket.on('game-won', (result: number) => {
-            console.log('res = ', result);
+            if (result === 1) {
+                let currentScore = score;
+                currentScore.xWins++;
+                setScore(currentScore);
+            } else if (result === 2) {
+                let currentScore = score;
+                currentScore.oWins++;
+                setScore(currentScore);
+            } else if (result === 3) {
+                let currentScore = score;
+                currentScore.ties++;
+                setScore(currentScore);
+            }
             showOverlayBoxVictory(result);
         });
     };
@@ -136,6 +160,34 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         });
     }, []);
 
+    const firstScoreCardText = () => {
+        if (gameMode === 'singlePlayer') {
+            if (playerMark === 0) {
+                return 'X (You)';
+            } else {
+                return 'X (CPU)';
+            }
+        } else if (gameMode === 'localMultiplayer') {
+            return 'P1 (X)';
+        } else {
+            return 'Error';
+        }
+    };
+
+    const secondScoreCardText = () => {
+        if (gameMode === 'singlePlayer') {
+            if (playerMark === 0) {
+                return 'O (CPU)';
+            } else {
+                return 'O (You)';
+            }
+        } else if (gameMode === 'localMultiplayer') {
+            return 'P2 (O)';
+        } else {
+            return 'Error';
+        }
+    };
+
     return (
         <div className="main-horizontal-content play-game">
             <div className="play-game-grid play-game-top-menu  flex-row-space-between">
@@ -147,20 +199,31 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             </div>
             <Gameboard board={board} onUpdate={updateBoard} />
             <div className="play-game-grid play-game-score-cards">
-                <ScoreCard color="light-blue" heading="X (You)" score={0} />
-                <ScoreCard color="silver" heading="Ties" score={0} />
-                <ScoreCard color="light-yellow" heading="O (CPU)" score={0} />
+                <ScoreCard
+                    color="light-blue"
+                    heading={firstScoreCardText()}
+                    score={score.xWins}
+                />
+                <ScoreCard color="silver" heading="Ties" score={score.ties} />
+                <ScoreCard
+                    color="light-yellow"
+                    heading={secondScoreCardText()}
+                    score={score.oWins}
+                />
             </div>
             {overlayBox.visible ? (
-                <OverlayBox
-                    subText={overlayBox.subText}
-                    mainText={overlayBox.mainText}
-                    mainImage={overlayBox.mainImage}
-                    buttonOneText={overlayBox.buttonOneText}
-                    buttonOneOnClick={overlayBox.buttonOneOnClick}
-                    buttonTwoText={overlayBox.buttonTwoText}
-                    buttonTwoOnClick={overlayBox.buttonTwoOnClick}
-                ></OverlayBox>
+                <>
+                    <div className="overlay-shadow" />
+                    <OverlayBox
+                        subText={overlayBox.subText}
+                        mainText={overlayBox.mainText}
+                        mainImage={overlayBox.mainImage}
+                        buttonOneText={overlayBox.buttonOneText}
+                        buttonOneOnClick={overlayBox.buttonOneOnClick}
+                        buttonTwoText={overlayBox.buttonTwoText}
+                        buttonTwoOnClick={overlayBox.buttonTwoOnClick}
+                    ></OverlayBox>
+                </>
             ) : (
                 <></>
             )}
