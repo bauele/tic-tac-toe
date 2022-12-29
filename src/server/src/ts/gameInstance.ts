@@ -142,18 +142,14 @@ export abstract class GameInstance {
         const rows = board.length;
         const cols = board[0].length;
 
-        console.log('here');
-
         for (let i = 0; i < rows; i++) {
             for (let j = 0; j < cols; j++) {
                 if (board[i][j] === 0) {
-                    console.log('found a 0');
                     return false;
                 }
             }
         }
 
-        console.log('returning true');
         return true;
     };
 }

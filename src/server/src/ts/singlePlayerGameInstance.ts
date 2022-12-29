@@ -16,7 +16,6 @@ export class SinglePlayerGameInstance extends GameInstance {
         if (player.mark !== 1) {
             this.placeComputerMark();
             this.playerTurn = 2;
-            console.log('player 2 should now go');
         }
     }
 
