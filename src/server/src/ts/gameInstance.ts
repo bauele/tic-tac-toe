@@ -4,12 +4,12 @@ import { Player } from './player';
 
 export abstract class GameInstance {
     protected readonly gameId: string;
-    protected readonly game = new TicTacToeGame();
+    protected game = new TicTacToeGame();
     protected readonly players = new Array<Player>();
     protected readonly chatMessages = new Array<string>();
 
     // Variable indicating which mark will take the first turn
-    protected readonly firstTurn: number;
+    protected firstTurn: number;
 
     // Variable indicating which player must take their turn next
     protected playerTurn: number;
@@ -50,6 +50,14 @@ export abstract class GameInstance {
 
     getPlayerTurn = () => {
         return this.playerTurn;
+    };
+
+    resetGame = () => {
+        // The other player will go first upon game reset
+        this.firstTurn = this.firstTurn === 1 ? 2 : 1;
+        this.playerTurn = this.firstTurn;
+
+        this.game = new TicTacToeGame();
     };
 
     victoryConditionFound = (playerNumber: number) => {
@@ -93,5 +101,25 @@ export abstract class GameInstance {
             return true;
 
         return false;
+    };
+
+    drawConditionFound = () => {
+        const board = this.getBoard();
+        const rows = board.length;
+        const cols = board[0].length;
+
+        console.log('here');
+
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                if (board[i][j] === 0) {
+                    console.log('found a 0');
+                    return false;
+                }
+            }
+        }
+
+        console.log('returning true');
+        return true;
     };
 }

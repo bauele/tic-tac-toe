@@ -18,16 +18,37 @@ export class SinglePlayerGameInstance extends GameInstance {
     }
 
     takeTurn = (row: number, col: number, playerNumber: number) => {
-        if (this.game.placeMark(row, col, playerNumber)) {
-            if (this.victoryConditionFound(playerNumber)) {
-                return playerNumber;
-            } else if (this.placeComputerMark()) {
-                /*  In a singleplayer game, the computer will always be
-                    the second player in the player's array */
-                if (this.victoryConditionFound(this.players[1].mark)) {
-                    return this.players[1].mark;
+        if (this.playerTurn !== -1) {
+            if (this.game.placeMark(row, col, playerNumber)) {
+                if (this.victoryConditionFound(playerNumber)) {
+                    /*  Prevent players from taking additional turns until
+                    game is reset */
+                    this.playerTurn = -1;
+                    return playerNumber;
                 } else {
-                    return 0;
+                    if (this.drawConditionFound()) {
+                        /*  Prevent players from taking additional turns until
+                         game is reset */
+                        this.playerTurn = -1;
+                        return 3;
+                    }
+                    /*  In a singleplayer game, the computer will always be
+                    the second player in the player's array */
+                    if (this.placeComputerMark()) {
+                        if (this.victoryConditionFound(this.players[1].mark)) {
+                            /*  Prevent players from taking additional turns until
+                        game is reset */
+                            this.playerTurn = -1;
+                            return this.players[1].mark;
+                        } else if (this.drawConditionFound()) {
+                            /*  Prevent players from taking additional turns until
+                            game is reset */
+                            this.playerTurn = -1;
+                            return 3;
+                        } else {
+                            return 0;
+                        }
+                    }
                 }
             }
 

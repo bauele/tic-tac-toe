@@ -11,6 +11,8 @@ import oTokenImage from '../assets/icon-o.svg';
 import logo from '../assets/logo.svg';
 import { socket } from '../socket';
 
+import { useNavigate } from 'react-router-dom';
+
 type PlayGameProps = {
     gameMode: gameMode;
     playerMark: number;
@@ -29,6 +31,8 @@ interface OverlayBox {
 }
 
 export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
+    const navigate = useNavigate();
+
     const [board, setBoard] = useState([
         [0, 0, 0],
         [0, 0, 0],
@@ -69,25 +73,61 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     };
 
     const showOverlayBoxVictory = (winningPlayer: number) => {
-        const overlayBox = {
-            mainTextColor: '',
-            mainImage:
-                winningPlayer === 1
-                    ? `${xTokenImage}`
-                    : winningPlayer === 2
-                    ? `${oTokenImage}`
-                    : '',
-            subText: `Player ${winningPlayer} wins!`,
+        if (winningPlayer === 1 || winningPlayer === 2) {
+            const overlayBox = {
+                visible: true,
 
-            visible: true,
-            mainText: 'Takes the round!',
-            buttonOneText: 'Quit',
-            buttonOneOnClick: () => {},
-            buttonTwoText: 'Next Round',
-            buttonTwoOnClick: () => {},
-        };
+                mainTextColor: '',
+                mainImage:
+                    winningPlayer === 1
+                        ? `${xTokenImage}`
+                        : winningPlayer === 2
+                        ? `${oTokenImage}`
+                        : '',
+                subText: `Player ${winningPlayer} wins!`,
 
-        setOverlayBox(overlayBox);
+                mainText: 'Takes the round!',
+                buttonOneText: 'Quit',
+                buttonOneOnClick: () => {
+                    navigate('/');
+                },
+                buttonTwoText: 'Next Round',
+                buttonTwoOnClick: () => {
+                    socket.emit('reset-board');
+                    const disableOverlay = overlayBox;
+                    overlayBox.visible = false;
+                    setOverlayBox(disableOverlay);
+                },
+            };
+
+            setOverlayBox(overlayBox);
+        }
+
+        // Tie condition
+        else if (winningPlayer === 3) {
+            const overlayBox = {
+                visible: true,
+                mainTextColor: '',
+                mainImage: '',
+                subText: '',
+
+                mainText: 'Round tied',
+                buttonOneText: 'Quit',
+                buttonOneOnClick: () => {
+                    navigate('/');
+                },
+                buttonTwoText: 'Next Round',
+                buttonTwoOnClick: () => {
+                    socket.emit('reset-board');
+
+                    const disableOverlay = overlayBox;
+                    overlayBox.visible = false;
+                    setOverlayBox(disableOverlay);
+                },
+            };
+
+            setOverlayBox(overlayBox);
+        }
     };
 
     useEffect(() => {

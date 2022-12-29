@@ -6,9 +6,9 @@ type OverlayBoxProps = {
     mainImage?: string;
     subText?: string;
     buttonOneText: string;
-    buttonOneOnClick?: Function;
+    buttonOneOnClick?: () => void;
     buttonTwoText: string;
-    buttonTwoOnClick?: Function;
+    buttonTwoOnClick?: () => void;
 };
 
 export const OverlayBox = ({
@@ -50,12 +50,14 @@ export const OverlayBox = ({
                         'overlay-button overlay-button-1 bg-silver box-shadow-silver-sm border-radius-10 upper-text'
                     }
                     text={buttonOneText}
+                    onClick={buttonOneOnClick}
                 />
                 <Button
                     className={
                         'overlay-button overlay-button-2 bg-light-yellow box-shadow-light-yellow-sm border-radius-10 upper-text'
                     }
                     text={buttonTwoText}
+                    onClick={buttonTwoOnClick}
                 />
             </div>
         </div>

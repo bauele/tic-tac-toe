@@ -74,10 +74,27 @@ io.on('connection', (socket) => {
                 socket.emit('board-update', game.getBoard());
 
                 /*  If turnResult is a 1 or 2, one of the players have won
-                    the game */
-                if (turnResult === 1 || turnResult === 2) {
+                    the game. If it's 3, there was a tie */
+                if (turnResult === 1 || turnResult === 2 || turnResult === 3) {
                     socket.emit('game-won', turnResult);
                 }
+            } else {
+                console.log("Unable to locate player's game");
+                // TODO: Send error back to client
+            }
+        } else {
+            console.log('Unable to locate player');
+            // TODO: Send error back to client
+        }
+    });
+
+    socket.on('reset-board', () => {
+        const player = socketGameMap.get(socket.id);
+        if (player) {
+            const game = gameIdMap.get(player.gameId);
+            if (game) {
+                game.resetGame();
+                socket.emit('board-update', game.getBoard());
             } else {
                 console.log("Unable to locate player's game");
                 // TODO: Send error back to client
