@@ -2,7 +2,7 @@ import { Button } from './Button';
 
 type OverlayBoxProps = {
     mainText: string;
-    mainTextColor?: 'light-yellow' | 'light-blue';
+    mainTextColor?: string;
     mainImage?: string;
     subText?: string;
     buttonOneText: string;
@@ -14,6 +14,7 @@ type OverlayBoxProps = {
 export const OverlayBox = ({
     mainText,
     mainImage = '',
+    mainTextColor = '',
     subText = '',
     buttonOneText,
     buttonOneOnClick,
@@ -41,7 +42,9 @@ export const OverlayBox = ({
                     <></>
                 )}
 
-                <h1 className="overlay-main-text upper-text">{mainText}</h1>
+                <h1 className={`overlay-main-text upper-text ${mainTextColor}`}>
+                    {mainText}
+                </h1>
             </div>
 
             <div className="overlay-button-container flex-row-center">
@@ -52,13 +55,17 @@ export const OverlayBox = ({
                     text={buttonOneText}
                     onClick={buttonOneOnClick}
                 />
-                <Button
-                    className={
-                        'overlay-button overlay-button-2 bg-light-yellow box-shadow-light-yellow-sm border-radius-10 upper-text'
-                    }
-                    text={buttonTwoText}
-                    onClick={buttonTwoOnClick}
-                />
+                {buttonTwoText !== '' ? (
+                    <Button
+                        className={
+                            'overlay-button overlay-button-2 bg-light-yellow box-shadow-light-yellow-sm border-radius-10 upper-text'
+                        }
+                        text={buttonTwoText}
+                        onClick={buttonTwoOnClick}
+                    />
+                ) : (
+                    <></>
+                )}
             </div>
         </div>
     );

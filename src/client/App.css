@@ -208,6 +208,14 @@
     animation-fill-mode: forwards;
 }
 
+.overlay-light-blue {
+    color: var(--light-blue);
+}
+
+.overlay-light-yellow {
+    color: var(--light-yellow);
+}
+
 .overlay-shadow {
     position: fixed;
     width: 100vw;

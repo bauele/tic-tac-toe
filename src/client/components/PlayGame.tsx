@@ -21,7 +21,7 @@ type PlayGameProps = {
 interface OverlayBox {
     visible: boolean;
     mainText: string;
-    mainTextColor?: 'light-yellow' | 'light-blue';
+    mainTextColor?: string;
     mainImage?: string;
     subText?: string;
     buttonOneText: string;
@@ -101,6 +101,29 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 showOverlayBoxVictory(result);
             }
         );
+
+        socket.on('invalid-player', () => {
+            const overlayBox = {
+                visible: true,
+
+                mainTextColor: '',
+                mainImage: '',
+                subText: `You refreshed the page`,
+
+                mainText: `Let's get you back to the main menu`,
+                buttonOneText: 'Okay!',
+                buttonOneOnClick: () => {
+                    const disableOverlay = overlayBox;
+                    overlayBox.visible = false;
+                    setOverlayBox(disableOverlay);
+                    navigate('/');
+                },
+                buttonTwoText: '',
+                buttonTwoOnClick: () => {},
+            };
+
+            setOverlayBox(overlayBox);
+        });
     };
 
     const updatePlayerTurn = () => {
@@ -130,7 +153,6 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             const overlayBox = {
                 visible: true,
 
-                mainTextColor: '',
                 mainImage:
                     winningPlayer === 1
                         ? `${xTokenImage}`
@@ -140,6 +162,12 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 subText: subtextString(),
 
                 mainText: 'Takes the round!',
+                mainTextColor:
+                    winningPlayer === 1
+                        ? `overlay-light-blue`
+                        : winningPlayer === 2
+                        ? `overlay-light-yellow`
+                        : '',
                 buttonOneText: 'Quit',
                 buttonOneOnClick: () => {
                     navigate('/');
@@ -252,6 +280,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                     <OverlayBox
                         subText={overlayBox.subText}
                         mainText={overlayBox.mainText}
+                        mainTextColor={overlayBox.mainTextColor}
                         mainImage={overlayBox.mainImage}
                         buttonOneText={overlayBox.buttonOneText}
                         buttonOneOnClick={overlayBox.buttonOneOnClick}

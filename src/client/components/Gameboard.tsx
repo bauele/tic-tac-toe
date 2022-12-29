@@ -17,26 +17,6 @@ export const Gameboard = ({
     onUpdate,
     victoryPosition,
 }: GameboardProps) => {
-    const gameToken = (value: number) => {
-        if (value === 1) {
-            return (
-                <img
-                    className="gameboard-token"
-                    src={oTokenImage}
-                    aria-label="o-mark"
-                />
-            );
-        } else if (value === 2) {
-            return (
-                <img
-                    className="gameboard-token"
-                    src={xTokenImage}
-                    aria-label="x-mark"
-                />
-            );
-        }
-    };
-
     const highlightGameToken = (row: number, col: number, value: number) => {
         if (victoryPosition !== undefined) {
             for (let x = 0; x < victoryPosition?.length; x++) {
@@ -51,7 +31,7 @@ export const Gameboard = ({
                             <div className="token-image-filter-dark-navy">
                                 <img
                                     className="gameboard-token"
-                                    src={oTokenImage}
+                                    src={xTokenImage}
                                     aria-label="o-mark"
                                 />
                             </div>
@@ -61,7 +41,7 @@ export const Gameboard = ({
                             <div className="token-image-filter-dark-navy">
                                 <img
                                     className="gameboard-token"
-                                    src={xTokenImage}
+                                    src={oTokenImage}
                                     aria-label="x-mark"
                                 />
                             </div>
@@ -74,15 +54,15 @@ export const Gameboard = ({
             return (
                 <img
                     className="gameboard-token"
-                    src={oTokenImage}
-                    aria-label="o-mark"
+                    src={xTokenImage}
+                    aria-label="x-mark"
                 />
             );
         } else if (value === 2) {
             return (
                 <img
                     className="gameboard-token"
-                    src={xTokenImage}
+                    src={oTokenImage}
                     aria-label="x-mark"
                 />
             );
@@ -101,9 +81,9 @@ export const Gameboard = ({
                     victoryPosition[x].j === col
                 ) {
                     if (value === 1) {
-                        return 'light-yellow';
-                    } else if (value === 2) {
                         return 'light-blue';
+                    } else if (value === 2) {
+                        return 'light-yellow';
                     }
                 }
             }

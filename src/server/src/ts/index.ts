@@ -95,6 +95,7 @@ io.on('connection', (socket) => {
         } else {
             console.log('Unable to locate player');
             // TODO: Send error back to client
+            socket.emit('invalid-player');
         }
     });
 
