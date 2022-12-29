@@ -12,19 +12,26 @@ export const PlayerTurnIndicator = ({
         <div className="play-game-top-menu-expanding-element bg-semi-dark-navy box-shadow-semi-dark-navy-sm">
             <div className="token-image-filter-silver">
                 {playerTurn === 1 ? (
-                    <img
-                        className="player-turn-mark"
-                        src={xTokenImage}
-                        aria-label={'x-mark'}
-                    />
+                    <>
+                        <img
+                            className="player-turn-mark"
+                            src={xTokenImage}
+                            aria-label={'x-mark'}
+                        />
+                        <p className="player-turn-heading upper-text"> Turn</p>
+                    </>
+                ) : playerTurn === 2 ? (
+                    <>
+                        <img
+                            className="player-turn-mark"
+                            src={oTokenImage}
+                            aria-label={'x-mark'}
+                        />
+                        <p className="player-turn-heading upper-text"> Turn</p>
+                    </>
                 ) : (
-                    <img
-                        className="player-turn-mark"
-                        src={oTokenImage}
-                        aria-label={'x-mark'}
-                    />
+                    <p>Error</p>
                 )}
-                <p className="player-turn-heading upper-text"> Turn</p>
             </div>
         </div>
     );

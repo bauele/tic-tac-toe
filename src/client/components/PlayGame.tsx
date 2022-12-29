@@ -70,8 +70,11 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         socket.off('game-won');
 
         socket.emit('gameboard-click', position);
-        socket.on('board-update', (board) => {
+        socket.on('board-update', (board, playerTurn) => {
             setBoard(board);
+            if (playerTurn !== -1) {
+                setPlayerTurn(playerTurn);
+            }
         });
 
         socket.on('game-won', (result: number) => {
@@ -173,8 +176,9 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     };
 
     useEffect(() => {
-        socket.on('board-update', (board) => {
+        socket.on('board-update', (board, playerTurn) => {
             setBoard(board);
+            setPlayerTurn(playerTurn);
         });
     }, []);
 

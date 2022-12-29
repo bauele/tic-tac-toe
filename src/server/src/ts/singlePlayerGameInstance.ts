@@ -1,5 +1,6 @@
 import { GameInstance } from './gameInstance';
 import { Player } from './player';
+import { TicTacToeGame } from './ticTacToeGame';
 
 export class SinglePlayerGameInstance extends GameInstance {
     constructor(gameId: string, player: Player) {
@@ -14,8 +15,25 @@ export class SinglePlayerGameInstance extends GameInstance {
             should immediately take their turn after game creation */
         if (player.mark !== 1) {
             this.placeComputerMark();
+            this.playerTurn = 2;
+            console.log('player 2 should now go');
         }
     }
+
+    // Wanted to call super.resetGame(), but wasn't able so I copy and pasted
+    resetGame = () => {
+        this.firstTurn = this.firstTurn === 1 ? 2 : 1;
+        this.playerTurn = this.firstTurn;
+
+        this.game = new TicTacToeGame();
+
+        /*  If the human player is not going first, the computer
+            should immediately take their turn after game creation */
+        if (this.players[0].mark !== this.firstTurn) {
+            this.placeComputerMark();
+            this.playerTurn = this.players[0].mark;
+        }
+    };
 
     takeTurn = (row: number, col: number, playerNumber: number) => {
         if (this.playerTurn !== -1) {

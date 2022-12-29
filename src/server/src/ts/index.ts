@@ -50,7 +50,12 @@ io.on('connection', (socket) => {
                 /*  If the player starts a singleplayer game and they are not using
                     the X mark, the computer will take their turn immediately.
                     The board state needs to be sent back to the client */
-                socket.emit('board-update', game.getBoard());
+                console.log('gameplayerturn = ', game.getPlayerTurn());
+                socket.emit(
+                    'board-update',
+                    game.getBoard(),
+                    game.getPlayerTurn()
+                );
             }
         } catch (error) {
             console.log(`Error starting game: ${error}`);
@@ -71,7 +76,11 @@ io.on('connection', (socket) => {
                     player.mark
                 );
 
-                socket.emit('board-update', game.getBoard());
+                socket.emit(
+                    'board-update',
+                    game.getBoard(),
+                    game.getPlayerTurn()
+                );
 
                 /*  If turnResult is a 1 or 2, one of the players have won
                     the game. If it's 3, there was a tie */
@@ -94,7 +103,11 @@ io.on('connection', (socket) => {
             const game = gameIdMap.get(player.gameId);
             if (game) {
                 game.resetGame();
-                socket.emit('board-update', game.getBoard());
+                socket.emit(
+                    'board-update',
+                    game.getBoard(),
+                    game.getPlayerTurn()
+                );
             } else {
                 console.log("Unable to locate player's game");
                 // TODO: Send error back to client
