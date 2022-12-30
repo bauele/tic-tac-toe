@@ -25,9 +25,9 @@ interface OverlayBox {
     mainImage?: string;
     subText?: string;
     buttonOneText: string;
-    buttonOneOnClick?: Function;
+    buttonOneOnClick?: () => void;
     buttonTwoText: string;
-    buttonTwoOnClick?: Function;
+    buttonTwoOnClick?: () => void;
 }
 
 interface Score {
@@ -50,6 +50,8 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         oWins: 0,
         ties: 0,
     });
+
+    const [overlayVisible, setOverlayVisible] = useState(false);
 
     const [overlayBox, setOverlayBox] = useState({
         visible: false,
@@ -99,6 +101,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                     setScore(currentScore);
                 }
                 showOverlayBoxVictory(result);
+                setOverlayVisible(true);
             }
         );
 
@@ -113,9 +116,6 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 mainText: `Let's get you back to the main menu`,
                 buttonOneText: 'Okay!',
                 buttonOneOnClick: () => {
-                    const disableOverlay = overlayBox;
-                    overlayBox.visible = false;
-                    setOverlayBox(disableOverlay);
                     navigate('/');
                 },
                 buttonTwoText: '',
@@ -123,6 +123,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             };
 
             setOverlayBox(overlayBox);
+            setOverlayVisible(true);
         });
     };
 
@@ -176,11 +177,10 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 buttonTwoOnClick: () => {
                     socket.emit('reset-board');
                     setVictoryPosition([]);
-                    const disableOverlay = overlayBox;
-                    overlayBox.visible = false;
-                    setOverlayBox(disableOverlay);
+                    setOverlayVisible(false);
                 },
             };
+            setOverlayVisible(true);
 
             setOverlayBox(overlayBox);
         }
@@ -202,12 +202,11 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 buttonTwoOnClick: () => {
                     socket.emit('reset-board');
 
-                    const disableOverlay = overlayBox;
-                    overlayBox.visible = false;
-                    setOverlayBox(disableOverlay);
+                    setOverlayVisible(false);
                 },
             };
 
+            setOverlayVisible(true);
             setOverlayBox(overlayBox);
         }
     };
@@ -247,12 +246,41 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         }
     };
 
+    const reloadGame = () => {
+        setOverlayVisible(true);
+
+        const overlayBox = {
+            visible: true,
+            mainTextColor: '',
+            mainImage: '',
+            subText: '',
+
+            mainText: 'Restart game?',
+            buttonOneText: 'No, cancel',
+            buttonOneOnClick: () => {
+                socket.emit('');
+
+                setOverlayVisible(false);
+            },
+            buttonTwoText: 'Yes, Restart',
+            buttonTwoOnClick: () => {
+                socket.emit('reset-board');
+                setOverlayVisible(false);
+            },
+        };
+
+        setOverlayBox(overlayBox);
+    };
+
     return (
         <div className="main-horizontal-content play-game">
             <div className="play-game-grid play-game-top-menu  flex-row-space-between">
                 <img src={logo} aria-label="logo" />
                 <PlayerTurnIndicator playerTurn={playerTurn} />
-                <button className="play-game-reload play-game-top-menu-expanding-element bg-silver box-shadow-silver-sm">
+                <button
+                    className="play-game-reload play-game-top-menu-expanding-element bg-silver box-shadow-silver-sm"
+                    onClick={reloadGame}
+                >
                     <p className="heading-xs">↻</p>
                 </button>
             </div>
@@ -274,7 +302,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                     score={score.oWins}
                 />
             </div>
-            {overlayBox.visible ? (
+            {overlayVisible ? (
                 <>
                     <div className="overlay-shadow" />
                     <OverlayBox
