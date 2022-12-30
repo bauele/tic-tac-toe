@@ -15,6 +15,10 @@
     src: url('assets/Outfit-VariableFont_wght.ttf');
 }
 
+button {
+    cursor: pointer;
+}
+
 .App {
     display: flex;
     justify-content: center;
@@ -350,6 +354,7 @@
     border: none;
     border-radius: 5px;
     aspect-ratio: 1;
+    cursor: pointer;
 }
 
 .play-game-reload p {
