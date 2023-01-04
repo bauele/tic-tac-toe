@@ -1,19 +1,30 @@
 import { MouseEventHandler } from 'react';
 
 type SwitchOptionProps = {
-    className?: string;
-    ariaChecked?: boolean;
-    children?: React.ReactNode;
-    onClick?: MouseEventHandler<HTMLDivElement>;
+    //  Prop indicating the visible element for the SwitchOption
+    children: React.ReactNode;
+
+    //  Prop indicating the parent function to call after a click event
+    onClick: MouseEventHandler<HTMLDivElement>;
+
+    //  Optional prop indicating the parent function to call after recieving
+    //  a keyboard event
     onKeyDown?: React.KeyboardEventHandler<HTMLDivElement>;
+
+    //  Optional prop indicating which classes to set to the div containing
+    //  the children
+    className?: string;
+
+    //  Optional prop included for accessibility
+    ariaChecked?: boolean;
 };
 
 export const SwitchOption = ({
-    className,
-    ariaChecked,
     children,
     onClick,
     onKeyDown,
+    className,
+    ariaChecked,
 }: SwitchOptionProps) => {
     return (
         <div
