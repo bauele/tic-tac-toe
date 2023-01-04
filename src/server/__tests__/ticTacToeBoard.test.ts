@@ -1,24 +1,25 @@
 import { describe, it, expect } from '@jest/globals';
 
 import { TicTacToeBoard } from '../src/ts/ticTacToeBoard';
+import { Mark } from '../src/ts/enums';
 
 describe('tic tac toe board', () => {
     it('should initially return a 3 by 3 array of 0s', () => {
         const ticTacToeBoard = new TicTacToeBoard();
         expect(ticTacToeBoard.getBoard()).toEqual([
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
+            [Mark.NONE, Mark.NONE, Mark.NONE],
+            [Mark.NONE, Mark.NONE, Mark.NONE],
+            [Mark.NONE, Mark.NONE, Mark.NONE],
         ]);
     });
 
     it('should allow a mark to be placed in an available space', () => {
         const ticTacToeBoard = new TicTacToeBoard();
-        expect(ticTacToeBoard.placeMark(0, 0, 1)).toBeTruthy();
+        expect(ticTacToeBoard.placeMark(0, 0, Mark.ONE)).toBeTruthy();
         expect(ticTacToeBoard.getBoard()).toEqual([
-            [1, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
+            [Mark.ONE, Mark.NONE, Mark.NONE],
+            [Mark.NONE, Mark.NONE, Mark.NONE],
+            [Mark.NONE, Mark.NONE, Mark.NONE],
         ]);
     });
 
@@ -28,9 +29,9 @@ describe('tic tac toe board', () => {
 
         expect(ticTacToeBoard.placeMark(0, 0, 2)).toBeFalsy();
         expect(ticTacToeBoard.getBoard()).toEqual([
-            [1, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
+            [Mark.ONE, Mark.NONE, Mark.NONE],
+            [Mark.NONE, Mark.NONE, Mark.NONE],
+            [Mark.NONE, Mark.NONE, Mark.NONE],
         ]);
     });
 
@@ -54,9 +55,9 @@ describe('tic tac toe board', () => {
         }).toThrow(RangeError);
 
         expect(ticTacToeBoard.getBoard()).toEqual([
-            [0, 0, 0],
-            [0, 0, 0],
-            [0, 0, 0],
+            [Mark.ONE, Mark.NONE, Mark.NONE],
+            [Mark.NONE, Mark.NONE, Mark.NONE],
+            [Mark.NONE, Mark.NONE, Mark.NONE],
         ]);
     });
 });

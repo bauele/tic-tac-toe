@@ -1,17 +1,19 @@
+import { Mark } from './enums';
+
 export class TicTacToeBoard {
     private static readonly ROWS = 3;
     private static readonly COLS = 3;
     private gameboard = [
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
+        [Mark.NONE, Mark.NONE, Mark.NONE],
+        [Mark.NONE, Mark.NONE, Mark.NONE],
+        [Mark.NONE, Mark.NONE, Mark.NONE],
     ];
 
     constructor() {}
 
     /*  Places a mark into the gameboard
         Returns true if successful, otherwise false */
-    placeMark = (row: number, col: number, value: number): boolean => {
+    placeMark = (row: number, col: number, value: Mark): boolean => {
         if (
             row < 0 ||
             row >= TicTacToeBoard.ROWS ||
@@ -30,7 +32,7 @@ export class TicTacToeBoard {
     };
 
     private canPlaceMark = (row: number, col: number) => {
-        if (this.gameboard[row][col] === 0) {
+        if (this.gameboard[row][col] === Mark.NONE) {
             return true;
         } else {
             return false;
