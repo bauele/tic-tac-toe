@@ -162,7 +162,7 @@ button {
     height: 100%;
 }
 
-.switch-toggled {
+.switch-option-indicator {
     position: absolute;
     left: 0;
     top: 0;
@@ -182,7 +182,7 @@ button {
 }
 
 /*  Switch animations */
-@keyframes switch-toggle-move-right {
+@keyframes switch-option-indicator-move-right {
     from {
         transform: translateX(0px);
     }
@@ -191,7 +191,7 @@ button {
     }
 }
 
-@keyframes switch-toggle-move-left {
+@keyframes switch-option-indicator-move-left {
     from {
         transform: translateX(calc(100%));
     }
@@ -200,14 +200,14 @@ button {
     }
 }
 
-.switch-toggled-move-right {
-    animation-name: switch-toggle-move-right;
+.switch-option-indicator-move-right {
+    animation-name: switch-option-indicator-move-right;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
 }
 
-.switch-toggled-move-left {
-    animation-name: switch-toggle-move-left;
+.switch-option-indicator-move-left {
+    animation-name: switch-option-indicator-move-left;
     animation-duration: 0.5s;
     animation-fill-mode: forwards;
 }

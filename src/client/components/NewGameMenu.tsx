@@ -33,8 +33,7 @@ export const NewGameMenu = (props: NewGameMenuProps) => {
                 </h1>
                 <div className="new-game-switch-box flex-row-center">
                     <Switch
-                        className="new-game-switch-box-inner border-radius-10"
-                        selected={selectedMark}
+                        selectedOption={selectedMark}
                         optionOne={
                             <img
                                 className="token-image-logo"
@@ -49,12 +48,6 @@ export const NewGameMenu = (props: NewGameMenuProps) => {
                                 aria-label={'o-mark'}
                             />
                         }
-                        switchOptionClassName={{
-                            default:
-                                'switch-option switch-radio-accessibiltiy token-image-filter-silver',
-                            selected:
-                                'switch-option switch-radio-accessibiltiy token-image-filter-dark-navy',
-                        }}
                         onChange={setSelectedMark}
                     />
                 </div>

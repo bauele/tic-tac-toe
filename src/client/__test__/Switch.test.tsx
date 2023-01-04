@@ -10,13 +10,9 @@ describe('Switch', () => {
     it('should contain two elements with radio roles in the document', () => {
         render(
             <Switch
-                selected={0}
+                selectedOption={0}
                 optionOne={'X'}
                 optionTwo={'O'}
-                switchOptionClassName={{
-                    default: 'default-class',
-                    selected: 'default-class selected-class',
-                }}
                 onChange={mockFunc}
             />
         );
@@ -25,7 +21,7 @@ describe('Switch', () => {
         expect(radioElements.length).toBe(2);
     });
 
-    it('should apply the selected-class to the clicked option', () => {
+    it('should apply the correct classes to the clicked option', () => {
         let selected = 0;
         const setSelected = (value: number) => {
             selected = value;
@@ -33,13 +29,9 @@ describe('Switch', () => {
 
         const { rerender } = render(
             <Switch
-                selected={selected}
+                selectedOption={selected}
                 optionOne={'X'}
                 optionTwo={'O'}
-                switchOptionClassName={{
-                    default: 'default-class',
-                    selected: 'selected-class',
-                }}
                 onChange={setSelected}
             />
         );
@@ -49,22 +41,20 @@ describe('Switch', () => {
 
         rerender(
             <Switch
-                selected={selected}
+                selectedOption={selected}
                 optionOne={'X'}
                 optionTwo={'O'}
-                switchOptionClassName={{
-                    default: 'default-class',
-                    selected: 'default-class selected-class',
-                }}
                 onChange={setSelected}
             />
         );
 
-        expect(optionOne).not.toHaveClass('selected-class');
-        expect(optionTwo).toHaveClass('default-class selected-class');
+        expect(optionOne).not.toHaveClass('token-image-filter-dark-navy');
+        expect(optionTwo).toHaveClass(
+            'switch-option switch-radio-accessibiltiy token-image-filter-dark-navy'
+        );
     });
 
-    it('should apply the selected-class to the option if enter is pressed', () => {
+    it('should apply the correct classes to the option if enter is pressed', () => {
         let selected = 0;
         const setSelected = (value: number) => {
             selected = value;
@@ -72,13 +62,9 @@ describe('Switch', () => {
 
         const { rerender } = render(
             <Switch
-                selected={selected}
+                selectedOption={selected}
                 optionOne={'X'}
                 optionTwo={'O'}
-                switchOptionClassName={{
-                    default: 'default-class',
-                    selected: 'selected-class',
-                }}
                 onChange={setSelected}
             />
         );
@@ -92,22 +78,20 @@ describe('Switch', () => {
 
         rerender(
             <Switch
-                selected={selected}
+                selectedOption={selected}
                 optionOne={'X'}
                 optionTwo={'O'}
-                switchOptionClassName={{
-                    default: 'default-class',
-                    selected: 'default-class selected-class',
-                }}
                 onChange={setSelected}
             />
         );
 
-        expect(optionOne).not.toHaveClass('selected-class');
-        expect(optionTwo).toHaveClass('default-class selected-class');
+        expect(optionOne).not.toHaveClass('token-image-filter-dark-navy');
+        expect(optionTwo).toHaveClass(
+            'switch-option switch-radio-accessibiltiy token-image-filter-dark-navy'
+        );
     });
 
-    it('should apply the selected-class to the option if space is pressed', () => {
+    it('should apply the correct classes to the option if space is pressed', () => {
         let selected = 0;
         const setSelected = (value: number) => {
             selected = value;
@@ -115,13 +99,9 @@ describe('Switch', () => {
 
         const { rerender } = render(
             <Switch
-                selected={selected}
+                selectedOption={selected}
                 optionOne={'X'}
                 optionTwo={'O'}
-                switchOptionClassName={{
-                    default: 'default-class',
-                    selected: 'selected-class',
-                }}
                 onChange={setSelected}
             />
         );
@@ -135,18 +115,64 @@ describe('Switch', () => {
 
         rerender(
             <Switch
-                selected={selected}
+                selectedOption={selected}
                 optionOne={'X'}
                 optionTwo={'O'}
-                switchOptionClassName={{
-                    default: 'default-class',
-                    selected: 'default-class selected-class',
-                }}
                 onChange={setSelected}
             />
         );
 
-        expect(optionOne).not.toHaveClass('selected-class');
-        expect(optionTwo).toHaveClass('default-class selected-class');
+        expect(optionOne).not.toHaveClass('token-image-filter-dark-navy');
+        expect(optionTwo).toHaveClass(
+            'switch-option switch-radio-accessibiltiy token-image-filter-dark-navy'
+        );
+    });
+
+    it('should apply the correct classes if optionOne is selected again after optionTwo', () => {
+        let selected = 0;
+        const setSelected = (value: number) => {
+            selected = value;
+        };
+
+        const { rerender } = render(
+            <Switch
+                selectedOption={selected}
+                optionOne={'X'}
+                optionTwo={'O'}
+                onChange={setSelected}
+            />
+        );
+
+        const [optionOne, optionTwo] = screen.getAllByRole('radio');
+        fireEvent.keyDown(optionTwo, {
+            key: 'Space',
+            code: 'Space',
+            charCode: 32,
+        });
+
+        rerender(
+            <Switch
+                selectedOption={selected}
+                optionOne={'X'}
+                optionTwo={'O'}
+                onChange={setSelected}
+            />
+        );
+
+        fireEvent.click(optionOne);
+
+        rerender(
+            <Switch
+                selectedOption={selected}
+                optionOne={'X'}
+                optionTwo={'O'}
+                onChange={setSelected}
+            />
+        );
+
+        expect(optionOne).toHaveClass(
+            'switch-option switch-radio-accessibiltiy token-image-filter-dark-navy'
+        );
+        expect(optionTwo).not.toHaveClass('token-image-filter-dark-navy');
     });
 });
