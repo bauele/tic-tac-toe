@@ -4,7 +4,7 @@ import { PlayerTurnIndicator } from './PlayerTurnIndicator';
 import { Gameboard } from './Gameboard';
 import { ScoreCard } from './ScoreCard';
 import { OverlayBox } from './OverlayBox';
-import { gameMode } from '../../shared/lib';
+import { gameMode } from '../../server/src/ts/lib';
 
 import xTokenImage from '../assets/icon-x.svg';
 import oTokenImage from '../assets/icon-o.svg';

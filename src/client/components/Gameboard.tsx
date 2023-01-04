@@ -4,7 +4,7 @@ import xTokenImage from '../assets/icon-x.svg';
 import oTokenImage from '../assets/icon-o.svg';
 import xTokenOutline from '../assets/icon-x-outline.svg';
 import oTokenOutline from '../assets/icon-o-outline.svg';
-import { VictoryPosition } from '../../shared/lib';
+import { VictoryPosition } from '../../server/src/ts/lib';
 
 type GameboardProps = {
     board: Array<Array<number>>;

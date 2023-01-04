@@ -4,8 +4,8 @@ import { GameInstance } from './gameInstance';
 import { createGame } from './server';
 import { Player } from './player';
 
-import { gameModes, gameSettings } from '../../../shared/lib';
-import serverConfig from '../../../config.json';
+import { gameModes, gameSettings } from './lib';
+import serverConfig from './config.json';
 
 // Map connecting client socket ids to players
 const socketGameMap = new Map<string, Player>();

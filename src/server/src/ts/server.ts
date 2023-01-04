@@ -3,7 +3,7 @@ const uuid = require('uuid');
 import { GameInstance } from './gameInstance';
 import { SinglePlayerGameInstance } from './singlePlayerGameInstance';
 import { LocalMultiplayerGameInstance } from './localMultiplayerGameInstance';
-import { gameModes, gameSettings } from '../../../shared/lib';
+import { gameModes, gameSettings } from './lib';
 
 /*  Creates a new game based on supplied settings.
     Throws an error if any of the settings provide are invalid
