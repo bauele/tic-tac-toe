@@ -1,21 +1,23 @@
 import { GameInstance } from './gameInstance';
 import { Player } from './player';
-import { TicTacToeGame } from './ticTacToeGame';
+import { TicTacToeBoard } from './ticTacToeBoard';
+
+import { Mark, GameStatus } from './enums';
 
 export class SinglePlayerGameInstance extends GameInstance {
     constructor(gameId: string, player: Player) {
         super(gameId, player);
         this.players.push({
             name: 'CPU',
-            mark: player.mark === 1 ? 2 : 1,
+            mark: player.mark === Mark.ONE ? Mark.TWO : Mark.ONE,
             gameId: this.gameId,
         });
 
         /*  If the human player is not going first, the computer
             should immediately take their turn after game creation */
-        if (player.mark !== 1) {
+        if (player.mark !== Mark.ONE) {
             this.placeComputerMark();
-            this.playerTurn = 2;
+            this.playerTurn = Mark.TWO;
         }
     }
 
@@ -24,7 +26,7 @@ export class SinglePlayerGameInstance extends GameInstance {
         this.firstTurn = this.firstTurn === 1 ? 2 : 1;
         this.playerTurn = this.firstTurn;
 
-        this.game = new TicTacToeGame();
+        this.game = new TicTacToeBoard();
         this.setVictoryPosition(new Array<{ i: number; j: number }>());
 
         /*  If the human player is not going first, the computer

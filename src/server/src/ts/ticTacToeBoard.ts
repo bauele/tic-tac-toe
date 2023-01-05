@@ -9,8 +9,6 @@ export class TicTacToeBoard {
         [Mark.NONE, Mark.NONE, Mark.NONE],
     ];
 
-    constructor() {}
-
     /*  Places a mark into the gameboard
         Returns true if successful, otherwise false */
     placeMark = (row: number, col: number, value: Mark): boolean => {

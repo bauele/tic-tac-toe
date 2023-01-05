@@ -1,10 +1,10 @@
-import { TicTacToeGame } from './ticTacToeGame';
+import { TicTacToeBoard } from './ticTacToeBoard';
 
 import { Player } from './player';
 
 export abstract class GameInstance {
     protected readonly gameId: string;
-    protected game = new TicTacToeGame();
+    protected game = new TicTacToeBoard();
     protected readonly players = new Array<Player>();
     protected readonly chatMessages = new Array<string>();
     protected victoryPosition = new Array<{ i: number; j: number }>();
@@ -67,7 +67,7 @@ export abstract class GameInstance {
         this.playerTurn = this.firstTurn;
 
         this.setVictoryPosition(new Array<{ i: number; j: number }>());
-        this.game = new TicTacToeGame();
+        this.game = new TicTacToeBoard();
     };
 
     victoryConditionFound = (playerNumber: number) => {
