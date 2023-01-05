@@ -17,3 +17,20 @@ export interface VictoryPosition {
         { i: number; j: number }
     ];
 }
+
+enum LineOrientation {
+    HORIZONTAL,
+    VERITCAL,
+    FOWARD_DIAGONAL,
+    BACKWARD_DIAGONAL,
+}
+
+interface BoardPosition {
+    x: number;
+    y: number;
+}
+
+export interface BoardLine {
+    orientation: LineOrientation;
+    startPosition: BoardPosition;
+}
