@@ -1,17 +1,18 @@
+import EventEmitter from 'events';
 import { Server } from 'socket.io';
 
-import { GameInstance } from './gameInstance';
-import { createGame } from './server';
-import { Player } from './player';
+import { Player, PlayerType, playerAIStrategy } from './player';
 
 import { gameModes, gameSettings } from './lib';
 import serverConfig from './config.json';
+import { Session } from './session';
+import { Mark } from './enums';
 
 // Map connecting client socket ids to players
-const socketGameMap = new Map<string, Player>();
+const socketGameMap = new Map<string, Player[]>();
 
 // Map connecting game ids to GameInstance objects
-const gameIdMap = new Map<string, GameInstance>();
+const sessionIdMap = new Map<Player, Session>();
 
 const io = new Server({
     cors: {
@@ -25,6 +26,8 @@ io.on('connection', (socket) => {
     socket.on('disconnect', (reason) => {
         console.log(`Socket disconnected for ${reason}`);
 
+        /*
+
         // Delete player's game
         const player = socketGameMap.get(socket.id);
         if (player) {
@@ -37,6 +40,7 @@ io.on('connection', (socket) => {
             // Delete player's socket
             socketGameMap.delete(socket.id);
         }
+        */
     });
 
     socket.on('new-game', (gameConfig: gameSettings) => {
@@ -46,7 +50,70 @@ io.on('connection', (socket) => {
             )}`
         );
 
-        try {
+        //  Identify the player and add it to the list of players
+        const newPlayer = {
+            name: 'default-human-player-name',
+            type: PlayerType.HUMAN,
+            mark: gameConfig.mark,
+            eventListener: new EventEmitter(),
+        };
+
+        newPlayer.eventListener.on('new-turn', (mark: Mark) => {
+            socket.emit(
+                'board-update',
+                session.getGame().getBoard(),
+                session.turnHandler.currentMarkTurn
+            );
+        });
+
+        socketGameMap.set(socket.id, [newPlayer]);
+
+        //  Create a new session for the player and add the player to it
+        const session = new Session();
+        sessionIdMap.set(newPlayer, session);
+        session.addPlayer(newPlayer);
+
+        //  If player wanted a single player game, add an AI player to session
+        if (gameConfig.mode === 'singlePlayer') {
+            const newAIPlayer = {
+                name: 'default-ai-player-name',
+                type: PlayerType.AI,
+                mark: gameConfig.mark === Mark.ONE ? Mark.TWO : Mark.ONE,
+                eventListener: new EventEmitter(),
+            };
+
+            newAIPlayer.eventListener.on('new-turn', (mark: Mark) => {
+                if (mark === newAIPlayer.mark) {
+                    let boardPosition = playerAIStrategy(session.getGame());
+
+                    if (boardPosition) {
+                        session.takeTurn(newAIPlayer, boardPosition);
+                    }
+                }
+            });
+
+            session.addPlayer(newAIPlayer);
+            session.start();
+        } else if (gameConfig.mode === 'localMultiplayer') {
+            const newLocalPlayer = {
+                name: 'default-human-player-name',
+                type: PlayerType.HUMAN,
+                mark: gameConfig.mark === Mark.ONE ? Mark.TWO : Mark.ONE,
+                eventListener: new EventEmitter(),
+            };
+
+            const currentPlayer = socketGameMap.get(socket.id);
+            if (currentPlayer) {
+                socketGameMap.set(socket.id, [
+                    currentPlayer[0],
+                    newLocalPlayer,
+                ]);
+                session.addPlayer(newLocalPlayer);
+            }
+        }
+
+        /*
+        try 
             const game = createGame(gameConfig);
             if (game) {
                 console.log(`Game created with id ${game.getId()}`);
@@ -60,9 +127,6 @@ io.on('connection', (socket) => {
                 socketGameMap.set(socket.id, player);
                 gameIdMap.set(game.getId(), game);
 
-                /*  If the player starts a singleplayer game and they are not using
-                    the X mark, the computer will take their turn immediately.
-                    The board state needs to be sent back to the client */
                 socket.emit(
                     'board-update',
                     game.getBoard(),
@@ -72,9 +136,50 @@ io.on('connection', (socket) => {
         } catch (error) {
             console.log(`Error starting game: ${error}`);
         }
+        */
     });
 
     socket.on('gameboard-click', (position) => {
+        // Find the session the player is connected to
+        const players = socketGameMap.get(socket.id);
+        if (players) {
+            const player = players[0];
+            const session = sessionIdMap.get(player);
+
+            if (players.length === 1) {
+                if (session) {
+                    session.takeTurn(player, {
+                        row: position[0],
+                        col: position[1],
+                    });
+                    socket.emit(
+                        'board-update',
+                        session.getGame().getBoard(),
+                        session.turnHandler.currentMarkTurn
+                    );
+                }
+            } else if (players.length === 2) {
+                if (session) {
+                    const playerTurn =
+                        player.mark === session?.turnHandler.currentMarkTurn
+                            ? player
+                            : players[1];
+                    console.log('playerTurn = ', playerTurn);
+                    session.takeTurn(playerTurn, {
+                        row: position[0],
+                        col: position[1],
+                    });
+
+                    socket.emit(
+                        'board-update',
+                        session.getGame().getBoard(),
+                        session.turnHandler.currentMarkTurn
+                    );
+                }
+            }
+        }
+
+        /*
         console.log(`\n${socket.id} clicked game board at ${position}`);
 
         // Find game the player is connected to
@@ -94,8 +199,7 @@ io.on('connection', (socket) => {
                     game.getPlayerTurn()
                 );
 
-                /*  If turnResult is a 1 or 2, one of the players have won
-                    the game. If it's 3, there was a tie */
+
                 if (turnResult === 1 || turnResult === 2 || turnResult === 3) {
                     const victoryPosition = game.getVictoryPosition();
                     socket.emit('game-won', turnResult, victoryPosition);
@@ -109,9 +213,12 @@ io.on('connection', (socket) => {
             // TODO: Send error back to client
             socket.emit('invalid-player');
         }
+        */
     });
 
+    /*
     socket.on('reset-board', () => {
+        
         const player = socketGameMap.get(socket.id);
         if (player) {
             const game = gameIdMap.get(player.gameId);
@@ -131,6 +238,8 @@ io.on('connection', (socket) => {
             // TODO: Send error back to client
         }
     });
+    
+    ) */
 });
 
 console.log(`Listening on port ${serverConfig.host.port}`);

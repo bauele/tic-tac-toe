@@ -3,34 +3,36 @@ import { TicTacToeBoard } from './ticTacToeBoard';
 import { Player } from './player';
 
 export abstract class GameInstance {
-    protected readonly gameId: string;
+    //protected readonly gameId: string;
     protected game = new TicTacToeBoard();
-    protected readonly players = new Array<Player>();
-    protected readonly chatMessages = new Array<string>();
-    protected victoryPosition = new Array<{ i: number; j: number }>();
+    //protected readonly players = new Array<Player>();
+    //protected readonly chatMessages = new Array<string>();
+    //protected victoryPosition = new Array<{ i: number; j: number }>();
 
     // Variable indicating which mark will take the first turn
-    protected firstTurn: number;
+    //protected firstTurn: number;
 
     // Variable indicating which player must take their turn next
-    protected playerTurn: number;
+    //protected playerTurn: number;
+
+    /*
 
     constructor(gameId: string, player: Player) {
         this.gameId = gameId;
 
         this.players.push(player);
 
-        /*  When a new game is created, the X mark will always go first.
-            On subsequent game resets, the mark going first will alternate */
+        // When a new game is created, the X mark will always go first.
+       //     On subsequent game resets, the mark going first will alternate 
         this.firstTurn = 1;
         this.playerTurn = 1;
     }
 
-    /*  This function must be overidden to indicate how sub game types
-        handle a turn.
-        RETURNS -   -1 if turn was not taken successfully
-                     0 if turn was taken successfully
-                     playerNumber if said player's turn caused them to win */
+    //  This function must be overidden to indicate how sub game types
+    //    handle a turn.
+    //    RETURNS -   -1 if turn was not taken successfully
+    //                 0 if turn was taken successfully
+    //                 playerNumber if said player's turn caused them to win 
     abstract takeTurn(row: number, col: number, playerNumber: number): number;
 
     addPlayer = (player: Player) => {
@@ -152,4 +154,5 @@ export abstract class GameInstance {
 
         return true;
     };
+    */
 }
