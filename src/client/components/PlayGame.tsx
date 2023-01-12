@@ -11,7 +11,7 @@ import oTokenImage from '../assets/icon-o.svg';
 import logo from '../assets/logo.svg';
 import { socket } from '../socket';
 
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
 import { GameState, GameStatus } from '../../server/src/ts/ticTacToeBoard';
 import { Mark } from '../../server/src/ts/enums';
 import { BoardLine } from '../../server/src/ts/lib';
@@ -205,6 +205,16 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 }
             }
         );
+    }, []);
+
+    useEffect(() => {
+        window.onload = function () {
+            navigate('/');
+        };
+
+        return () => {
+            window.onload = null;
+        };
     }, []);
 
     const firstScoreCardText = () => {
