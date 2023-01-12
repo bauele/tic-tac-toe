@@ -63,6 +63,10 @@ button {
     height: 32px;
 }
 
+.site-logo {
+    cursor: pointer;
+}
+
 .token-image-filter-silver img {
     filter: brightness(0) saturate(100%) invert(90%) sepia(10%) saturate(485%)
         hue-rotate(156deg) brightness(84%) contrast(85%);

@@ -258,11 +258,9 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         console.log(gameMode);
 
         if (gameMode === 'singlePlayer') {
-            console.log('sing');
             console.log(playerMark);
 
             if (playerMark + 1 === Mark.ONE) {
-                console.log('yes');
                 return TokenOutlineMode.MARK_ONE_ONLY;
             } else if (playerMark + 1 === Mark.TWO) {
                 return TokenOutlineMode.MARK_TWO_ONLY;
@@ -270,14 +268,18 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         } else if (gameMode === 'localMultiplayer') {
             return TokenOutlineMode.BOTH_MARKS;
         } else {
-            console.log('error');
         }
     };
 
     return (
         <div className="main-horizontal-content play-game">
-            <div className="play-game-grid play-game-top-menu  flex-row-space-between">
-                <img src={logo} aria-label="logo" />
+            <div className="play-game-grid play-game-top-menu flex-row-space-between">
+                <img
+                    src={logo}
+                    aria-label="logo"
+                    className="site-logo"
+                    onClick={() => navigate('/')}
+                />
                 <PlayerTurnIndicator playerTurn={playerTurn} />
                 <button
                     className="play-game-reload play-game-top-menu-expanding-element bg-silver box-shadow-silver-sm"
