@@ -12,6 +12,8 @@ import logo from '../assets/logo.svg';
 import { socket } from '../socket';
 
 import { useNavigate } from 'react-router-dom';
+import { GameState, GameStatus } from '../../server/src/ts/ticTacToeBoard';
+import { Mark } from '../../server/src/ts/enums';
 
 type PlayGameProps = {
     gameMode: gameMode;
@@ -71,17 +73,31 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
 
     const updateBoard = (position: [number, number]) => {
         // Disconnect listeners to avoid multiple triggers
-        socket.off('board-update');
         socket.off('game-won');
 
         socket.emit('gameboard-click', position);
-        socket.on('board-update', (board, playerTurn) => {
-            setBoard(board);
-            if (playerTurn !== -1) {
-                setPlayerTurn(playerTurn);
-            }
-        });
 
+        socket.off('game-state-update');
+        socket.on(
+            'game-state-update',
+            (gameState: GameState, currentMarkTurn: Mark) => {
+                console.log(gameState);
+                console.log(currentMarkTurn);
+
+                setBoard(gameState.gameboard);
+                if (gameState.status === GameStatus.IN_PROGRESS) {
+                    setPlayerTurn(currentMarkTurn);
+                } else if (
+                    gameState.status === GameStatus.MARK_ONE_VICTORY ||
+                    gameState.status === GameStatus.MARK_TWO_VICTORY
+                ) {
+                    //  TODO: This will not always show the correct winning player
+                    showOverlayBoxVictory(currentMarkTurn);
+                }
+            }
+        );
+
+        /*
         socket.on(
             'game-won',
             (result: number, victoryPosition: { i: number; j: number }[]) => {
@@ -104,6 +120,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 setOverlayVisible(true);
             }
         );
+        */
 
         socket.on('invalid-player', () => {
             const overlayBox = {

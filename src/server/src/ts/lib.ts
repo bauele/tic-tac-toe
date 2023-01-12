@@ -18,14 +18,14 @@ export interface VictoryPosition {
     ];
 }
 
-enum LineOrientation {
+export enum LineOrientation {
     HORIZONTAL,
     VERITCAL,
     FOWARD_DIAGONAL,
     BACKWARD_DIAGONAL,
 }
 
-interface BoardPosition {
+export interface BoardPosition {
     x: number;
     y: number;
 }

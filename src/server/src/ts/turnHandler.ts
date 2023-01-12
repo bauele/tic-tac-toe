@@ -15,6 +15,10 @@ export class TurnHandler {
         this.eventEmitters = new Array<EventEmitter>();
     }
 
+    getCurrentMarkTurn = () => {
+        return this.currentMarkTurn;
+    };
+
     //  Obtains a player's individual EventEmitter for later usage
     attachTurnEmitter = (player: Player) => {
         this.eventEmitters.push(player.eventListener);

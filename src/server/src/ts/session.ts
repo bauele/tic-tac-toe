@@ -37,6 +37,10 @@ export class Session {
         return this.sessionId;
     };
 
+    getTurnHandler = () => {
+        return this.turnHandler;
+    };
+
     start = () => {
         this.turnHandler.emitTurn();
     };

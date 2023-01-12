@@ -7,6 +7,7 @@ import { gameSettings } from './lib';
 import serverConfig from './config.json';
 import { Session } from './session';
 import { Mark } from './enums';
+import { GameStatus } from './ticTacToeBoard';
 
 //  Map connecting client socket ids to players
 const socketPlayerMap = new Map<string, Player[]>();
@@ -150,6 +151,25 @@ io.on('connection', (socket) => {
                     session.turnHandler.currentMarkTurn
                 );
 
+                //  Get the updated game state
+                const gameState = session.getGame().getGameState();
+                socket.emit(
+                    'game-state-update',
+                    gameState,
+                    session.getTurnHandler().getCurrentMarkTurn()
+                );
+
+                /*
+                if (gameState.status === GameStatus.MARK_ONE_VICTORY) {
+                    socket.emit('game-won', 1, {});
+                } else if (gameState.status === GameStatus.MARK_TWO_VICTORY) {
+                    socket.emit('game-won', 2, {});
+                } else if (gameState.status === GameStatus.DRAW) {
+                    //  TODO: Don't emit game-won for this, it doesn't make much sense
+                    socket.emit('game-won', 3, {});
+                }
+                */
+
                 //  If there are two players for a single socket, it is a local
                 //  multiplayer game and the turn should be taken by whichever
                 //  player is supposed to be going next
@@ -176,14 +196,6 @@ io.on('connection', (socket) => {
     });
 
     /*
-                if (turnResult === 1 || turnResult === 2 || turnResult === 3) {
-                    const victoryPosition = game.getVictoryPosition();
-                    socket.emit('game-won', turnResult, victoryPosition);
-                }
-            
-    
-
-    /*
     socket.on('reset-board', () => {
         
         const player = socketGameMap.get(socket.id);
@@ -205,8 +217,7 @@ io.on('connection', (socket) => {
             // TODO: Send error back to client
         }
     });
-    
-    ) */
+    */
 });
 
 console.log(`Listening on port ${serverConfig.host.port}`);
