@@ -63,10 +63,11 @@ io.on('connection', (socket) => {
         //  that another player took their turn, send them the new game
         //  state
         newPlayer.eventListener.on('new-turn', (mark: Mark) => {
+            const gameState = session.getGame().getGameState();
             socket.emit(
-                'board-update',
-                session.getGame().getBoard(),
-                session.turnHandler.currentMarkTurn
+                'game-state-update',
+                gameState,
+                session.getTurnHandler().getCurrentMarkTurn()
             );
         });
 
@@ -96,7 +97,6 @@ io.on('connection', (socket) => {
 
                     setTimeout(function () {
                         let boardPosition = playerAIStrategy(session.getGame());
-
                         if (boardPosition) {
                             session.takeTurn(newAIPlayer, boardPosition);
                         }

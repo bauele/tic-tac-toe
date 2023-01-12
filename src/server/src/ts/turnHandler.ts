@@ -1,6 +1,6 @@
 import EventEmitter from 'events';
 import { Player } from './player';
-import { TicTacToeBoard } from './ticTacToeBoard';
+import { GameStatus, TicTacToeBoard } from './ticTacToeBoard';
 import { BoardPosition, Mark } from './enums';
 
 //  A TurnHandler object is responsible for notifying all players within a
@@ -39,15 +39,33 @@ export class TurnHandler {
         player: Player,
         boardPosition: BoardPosition
     ) => {
-        if (game.placeMark(boardPosition.row, boardPosition.col, player.mark)) {
-            this.currentMarkTurn =
-                player.mark === Mark.ONE ? Mark.TWO : Mark.ONE;
+        //  Ensure that the game is still in progress, and that the player
+        //  attempting to take their turn is actually allowed to do so
+        if (
+            game.getGameState().status === GameStatus.IN_PROGRESS &&
+            player.mark === this.currentMarkTurn
+        ) {
+            if (
+                game.placeMark(
+                    boardPosition.row,
+                    boardPosition.col,
+                    player.mark
+                )
+            ) {
+                //  If a player placed their mark successfully, determine the
+                //  who will go next if the game is still in progress
+                if (game.getGameState().status === GameStatus.IN_PROGRESS) {
+                    this.currentMarkTurn =
+                        player.mark === Mark.ONE ? Mark.TWO : Mark.ONE;
+                }
 
-            this.emitTurn();
+                this.emitTurn();
 
-            return true;
+                return true;
+            }
+            return false;
+        } else {
+            return false;
         }
-
-        return false;
     };
 }

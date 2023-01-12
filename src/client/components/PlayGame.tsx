@@ -66,16 +66,16 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
 
     const updateBoard = (position: [number, number]) => {
         // Disconnect listeners to avoid multiple triggers
-        socket.off('game-won');
 
         socket.emit('gameboard-click', position);
 
+        /*
         socket.off('game-state-update');
         socket.on(
             'game-state-update',
             (gameState: GameState, currentMarkTurn: Mark) => {
-                console.log(gameState);
-                console.log(currentMarkTurn);
+                //console.log(gameState);
+                //console.log(currentMarkTurn);
 
                 setBoard(gameState.gameboard);
                 if (gameState.status === GameStatus.IN_PROGRESS) {
@@ -94,6 +94,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 }
             }
         );
+        */
 
         /*
         socket.on(
@@ -224,13 +225,32 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         }
     };
 
+    //  This is necessary in order for the board to be updated
+    //  if the AI is going first
     useEffect(() => {
-        /*
-        socket.on('board-update', (board, playerTurn) => {
-            setBoard(board);
-            setPlayerTurn(playerTurn);
-        });
-        */
+        console.log('use effect call');
+
+        socket.off('game-state-update');
+        socket.on(
+            'game-state-update',
+            (gameState: GameState, currentMarkTurn: Mark) => {
+                setBoard(gameState.gameboard);
+                if (gameState.status === GameStatus.IN_PROGRESS) {
+                    setPlayerTurn(currentMarkTurn);
+                } else if (
+                    gameState.status === GameStatus.MARK_ONE_VICTORY ||
+                    gameState.status === GameStatus.MARK_TWO_VICTORY
+                ) {
+                    //  TODO: This will not always show the correct winning player
+                    if (gameState.victoryPosition) {
+                        setVictoryPosition(gameState.victoryPosition);
+                        showOverlayBoxVictory(currentMarkTurn);
+                    }
+                } else if (gameState.status === GameStatus.DRAW) {
+                    showOverlayBoxVictory(Mark.NONE);
+                }
+            }
+        );
     }, []);
 
     const firstScoreCardText = () => {
