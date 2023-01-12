@@ -145,11 +145,6 @@ io.on('connection', (socket) => {
                     row: position[0],
                     col: position[1],
                 });
-                socket.emit(
-                    'board-update',
-                    session.getGame().getBoard(),
-                    session.turnHandler.currentMarkTurn
-                );
 
                 //  Get the updated game state
                 const gameState = session.getGame().getGameState();
@@ -158,17 +153,6 @@ io.on('connection', (socket) => {
                     gameState,
                     session.getTurnHandler().getCurrentMarkTurn()
                 );
-
-                /*
-                if (gameState.status === GameStatus.MARK_ONE_VICTORY) {
-                    socket.emit('game-won', 1, {});
-                } else if (gameState.status === GameStatus.MARK_TWO_VICTORY) {
-                    socket.emit('game-won', 2, {});
-                } else if (gameState.status === GameStatus.DRAW) {
-                    //  TODO: Don't emit game-won for this, it doesn't make much sense
-                    socket.emit('game-won', 3, {});
-                }
-                */
 
                 //  If there are two players for a single socket, it is a local
                 //  multiplayer game and the turn should be taken by whichever
@@ -183,10 +167,12 @@ io.on('connection', (socket) => {
                     col: position[1],
                 });
 
+                //  Get the updated game state
+                const gameState = session.getGame().getGameState();
                 socket.emit(
-                    'board-update',
-                    session.getGame().getBoard(),
-                    session.turnHandler.currentMarkTurn
+                    'game-state-update',
+                    gameState,
+                    session.getTurnHandler().getCurrentMarkTurn()
                 );
             }
         } else {
