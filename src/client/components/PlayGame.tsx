@@ -236,27 +236,22 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     };
 
     const reloadGame = () => {
+        setTestOverlay(
+            <OverlayBox
+                mainText="Restart game?"
+                buttonOneText="No, cancel"
+                buttonOneOnClick={() => {
+                    setOverlayVisible(false);
+                }}
+                buttonTwoText="Yes, Restart"
+                buttonTwoOnClick={() => {
+                    socket.emit('next-round');
+                    setOverlayVisible(false);
+                }}
+            ></OverlayBox>
+        );
+
         setOverlayVisible(true);
-
-        const overlayBox = {
-            visible: true,
-            mainTextColor: '',
-            mainImage: '',
-            subText: '',
-
-            mainText: 'Restart game?',
-            buttonOneText: 'No, cancel',
-            buttonOneOnClick: () => {
-                socket.emit('');
-
-                setOverlayVisible(false);
-            },
-            buttonTwoText: 'Yes, Restart',
-            buttonTwoOnClick: () => {
-                socket.emit('next-round');
-                setOverlayVisible(false);
-            },
-        };
     };
 
     return (
