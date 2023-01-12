@@ -2,14 +2,29 @@ import { GameboardSpace } from './GameboardSpace';
 
 import xTokenImage from '../assets/icon-x.svg';
 import oTokenImage from '../assets/icon-o.svg';
+import xTokenImageOutline from '../assets/icon-x-outline.svg';
+import oTokenImageOutline from '../assets/icon-o-outline.svg';
 import { BoardPosition } from '../../server/src/ts/lib';
 import { BoardLine, LineOrientation } from '../../server/src/ts/lib';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Mark } from '../../server/src/ts/enums';
+
+export enum TokenOutlineMode {
+    MARK_ONE_ONLY,
+    MARK_TWO_ONLY,
+    BOTH_MARKS,
+}
 
 type GameboardProps = {
     //  Prop representing the gameboard
     board: Array<Array<Mark>>;
+
+    //  Prop indicating the current player's turn
+    playerTurn?: Mark;
+
+    //  Prop indicating what token values should be shown as an outline while
+    //  hovering over an available GameboardSpace
+    tokenOutlineMode?: TokenOutlineMode;
 
     //  Prop indicating a parent function to be called when GameboardSpace
     //  components are interacted with
@@ -20,10 +35,20 @@ type GameboardProps = {
     victoryLine?: BoardLine | null;
 };
 
-export const Gameboard = ({ board, onUpdate, victoryLine }: GameboardProps) => {
+export const Gameboard = ({
+    board,
+    onUpdate,
+    playerTurn,
+    tokenOutlineMode,
+    victoryLine,
+}: GameboardProps) => {
     const [victoryLineSpaces, setVictoryLineSpaces] = useState<
         BoardPosition[] | null
     >(null);
+
+    const [mouseOverSpace, setMouseOverSpace] = useState<BoardPosition | null>(
+        null
+    );
 
     //  Whenever victoryLine has been changed, the Gameboard determine which
     //  spaces on the board are within that victoryLine
@@ -108,6 +133,40 @@ export const Gameboard = ({ board, onUpdate, victoryLine }: GameboardProps) => {
     //  will be automatically highlighted if it is found to be within the
     //  victoryLine
     const gameToken = (row: number, col: number, value: number) => {
+        if (row === mouseOverSpace?.x && col == mouseOverSpace?.y) {
+            if (value === Mark.NONE) {
+                if (playerTurn === Mark.ONE) {
+                    if (
+                        tokenOutlineMode === TokenOutlineMode.MARK_ONE_ONLY ||
+                        tokenOutlineMode == TokenOutlineMode.BOTH_MARKS
+                    )
+                        return (
+                            <div>
+                                <img
+                                    className="gameboard-token"
+                                    src={xTokenImageOutline}
+                                    aria-label="x-mark"
+                                />
+                            </div>
+                        );
+                } else if (playerTurn === Mark.TWO) {
+                    if (
+                        tokenOutlineMode === TokenOutlineMode.MARK_TWO_ONLY ||
+                        tokenOutlineMode == TokenOutlineMode.BOTH_MARKS
+                    )
+                        return (
+                            <div>
+                                <img
+                                    className="gameboard-token"
+                                    src={oTokenImageOutline}
+                                    aria-label="o-mark"
+                                />
+                            </div>
+                        );
+                }
+            }
+        }
+
         if (victoryLineSpaces) {
             for (let i = 0; i < victoryLineSpaces.length; i++) {
                 if (
@@ -138,7 +197,6 @@ export const Gameboard = ({ board, onUpdate, victoryLine }: GameboardProps) => {
                 }
             }
         }
-
         if (value === Mark.ONE) {
             return (
                 <img
@@ -158,6 +216,8 @@ export const Gameboard = ({ board, onUpdate, victoryLine }: GameboardProps) => {
         }
     };
 
+    const showTokenOutline = (key: number) => {};
+
     //  Map the board to GameboardSpace components
     const gameBoardSpaces = board.map((row: number[], rowIndex: number) => {
         return row.map((value: number, colIndex: number) => {
@@ -174,6 +234,10 @@ export const Gameboard = ({ board, onUpdate, victoryLine }: GameboardProps) => {
                             onUpdate([rowIndex, colIndex]);
                         }
                     }}
+                    onMouseOver={() =>
+                        setMouseOverSpace({ x: rowIndex, y: colIndex })
+                    }
+                    onMouseLeave={() => setMouseOverSpace(null)}
                     highlight={boardSpaceHighlightColor(
                         rowIndex,
                         colIndex,

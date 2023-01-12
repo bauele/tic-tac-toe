@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { PlayerTurnIndicator } from './PlayerTurnIndicator';
-import { Gameboard } from './Gameboard';
+import { TokenOutlineMode, Gameboard } from './Gameboard';
 import { ScoreCard } from './ScoreCard';
 import { OverlayBox } from './OverlayBox';
 import { gameMode } from '../../server/src/ts/lib';
@@ -254,6 +254,26 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         setOverlayVisible(true);
     };
 
+    const determineOutlineMode = () => {
+        console.log(gameMode);
+
+        if (gameMode === 'singlePlayer') {
+            console.log('sing');
+            console.log(playerMark);
+
+            if (playerMark + 1 === Mark.ONE) {
+                console.log('yes');
+                return TokenOutlineMode.MARK_ONE_ONLY;
+            } else if (playerMark + 1 === Mark.TWO) {
+                return TokenOutlineMode.MARK_TWO_ONLY;
+            }
+        } else if (gameMode === 'localMultiplayer') {
+            return TokenOutlineMode.BOTH_MARKS;
+        } else {
+            console.log('error');
+        }
+    };
+
     return (
         <div className="main-horizontal-content play-game">
             <div className="play-game-grid play-game-top-menu  flex-row-space-between">
@@ -269,6 +289,8 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             <Gameboard
                 board={board}
                 onUpdate={updateBoard}
+                tokenOutlineMode={determineOutlineMode()}
+                playerTurn={playerTurn}
                 victoryLine={victoryPosition}
             />
             <div className="play-game-grid play-game-score-cards">

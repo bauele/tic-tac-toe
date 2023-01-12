@@ -2,6 +2,8 @@ type GameboardSpaceProps = {
     children: React.ReactNode;
     onClick: React.MouseEventHandler<HTMLButtonElement>;
     onKeyDown?: React.KeyboardEventHandler<HTMLButtonElement>;
+    onMouseOver?: React.MouseEventHandler<HTMLButtonElement>;
+    onMouseLeave?: React.MouseEventHandler<HTMLButtonElement>;
     highlight?: string;
 };
 
@@ -9,6 +11,8 @@ export const GameboardSpace = ({
     children,
     onClick,
     onKeyDown,
+    onMouseOver,
+    onMouseLeave,
     highlight,
 }: GameboardSpaceProps) => {
     const highlightSpace = () => {
@@ -26,6 +30,8 @@ export const GameboardSpace = ({
             className={`gameboard-space ${highlightSpace()} border-radius-15`}
             onClick={onClick}
             onKeyDown={onKeyDown}
+            onMouseOver={onMouseOver}
+            onMouseLeave={onMouseLeave}
         >
             {children}
         </button>
