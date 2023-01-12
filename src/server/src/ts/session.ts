@@ -46,8 +46,19 @@ export class Session {
     };
 
     restartGame = () => {
+        console.log('-----');
         this.currentGame = new TicTacToeBoard();
-        this.turnHandler.swapCurrentMarkTurn();
+        /*
+        console.log(
+            `Mark ${this.turnHandler.currentMarkTurn} went first last time`
+        );
+        */
+        this.turnHandler.swapFirstTurn();
+        this.turnHandler.currentMarkTurn = this.turnHandler.firstTurn;
+        /*
+        console.log(
+            `Mark ${this.turnHandler.currentMarkTurn} will go first now`
+        ); */
         this.start();
     };
 

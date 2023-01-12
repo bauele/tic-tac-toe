@@ -6,12 +6,14 @@ import { BoardPosition, Mark } from './enums';
 //  A TurnHandler object is responsible for notifying all players within a
 //  Session whenever a player successfully takes their turn
 export class TurnHandler {
+    firstTurn: Mark;
     currentMarkTurn: Mark;
     eventEmitters: EventEmitter[];
 
     constructor() {
         // The first turn of a new Session is always taken by Mark One
-        this.currentMarkTurn = Mark.ONE;
+        this.firstTurn = Mark.ONE;
+        this.currentMarkTurn = this.firstTurn;
         this.eventEmitters = new Array<EventEmitter>();
     }
 
@@ -22,6 +24,10 @@ export class TurnHandler {
     swapCurrentMarkTurn = () => {
         this.currentMarkTurn =
             this.currentMarkTurn === Mark.ONE ? Mark.TWO : Mark.ONE;
+    };
+
+    swapFirstTurn = () => {
+        this.firstTurn = this.firstTurn === Mark.ONE ? Mark.TWO : Mark.ONE;
     };
 
     //  Obtains a player's individual EventEmitter for later usage
@@ -60,8 +66,7 @@ export class TurnHandler {
                 //  If a player placed their mark successfully, determine the
                 //  who will go next if the game is still in progress
                 if (game.getGameState().status === GameStatus.IN_PROGRESS) {
-                    this.currentMarkTurn =
-                        player.mark === Mark.ONE ? Mark.TWO : Mark.ONE;
+                    this.swapCurrentMarkTurn();
                 }
 
                 this.emitTurn();
@@ -70,6 +75,7 @@ export class TurnHandler {
             }
             return false;
         } else {
+            console.log('Player blocked from taking turn');
             return false;
         }
     };
