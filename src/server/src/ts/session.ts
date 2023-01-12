@@ -1,10 +1,10 @@
 const uuid = require('uuid');
 import { BoardPosition } from './enums';
 import { Player } from '../ts/player';
-import { TicTacToeBoard } from './ticTacToeBoard';
+import { GameStatus, TicTacToeBoard } from './ticTacToeBoard';
 import { TurnHandler } from './turnHandler';
 
-interface SessionScoreInfo {
+export interface SessionScoreInfo {
     markOneWins: number;
     markTwoWins: number;
     draws: number;
@@ -53,6 +53,15 @@ export class Session {
 
     takeTurn = (player: Player, boardPosition: BoardPosition) => {
         this.turnHandler.handle_turn(this.currentGame, player, boardPosition);
+
+        const gameStatus = this.getGame().getGameState().status;
+        if (gameStatus === GameStatus.MARK_ONE_VICTORY) {
+            this.addMarkOneWin();
+        } else if (gameStatus === GameStatus.MARK_TWO_VICTORY) {
+            this.addMarkTwoWin();
+        } else if (gameStatus === GameStatus.DRAW) {
+            this.addDraw();
+        }
     };
 
     //  TODO: Prevent a player from joining using the same mark as the existing
@@ -75,6 +84,10 @@ export class Session {
 
     getGame = () => {
         return this.currentGame;
+    };
+
+    getSessionScore = () => {
+        return this.sessionScore;
     };
 
     addMarkOneWin = () => {

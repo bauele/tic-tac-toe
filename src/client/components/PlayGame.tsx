@@ -15,6 +15,7 @@ import { useNavigate } from 'react-router-dom';
 import { GameState, GameStatus } from '../../server/src/ts/ticTacToeBoard';
 import { Mark } from '../../server/src/ts/enums';
 import { BoardLine } from '../../server/src/ts/lib';
+import { SessionScoreInfo } from '../../server/src/ts/session';
 
 type PlayGameProps = {
     gameMode: gameMode;
@@ -178,7 +179,17 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         socket.off('game-state-update');
         socket.on(
             'game-state-update',
-            (gameState: GameState, currentMarkTurn: Mark) => {
+            (
+                gameState: GameState,
+                currentMarkTurn: Mark,
+                sessionScore: SessionScoreInfo
+            ) => {
+                setScore({
+                    xWins: sessionScore.markOneWins,
+                    oWins: sessionScore.markTwoWins,
+                    ties: sessionScore.draws,
+                });
+
                 setBoard(gameState.gameboard);
                 setVictoryPosition(gameState.victoryPosition);
 

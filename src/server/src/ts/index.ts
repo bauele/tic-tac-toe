@@ -67,7 +67,8 @@ io.on('connection', (socket) => {
             socket.emit(
                 'game-state-update',
                 gameState,
-                session.getTurnHandler().getCurrentMarkTurn()
+                session.getTurnHandler().getCurrentMarkTurn(),
+                session.getSessionScore()
             );
         });
 
@@ -105,7 +106,8 @@ io.on('connection', (socket) => {
                         socket.emit(
                             'game-state-update',
                             gameState,
-                            session.getTurnHandler().getCurrentMarkTurn()
+                            session.getTurnHandler().getCurrentMarkTurn(),
+                            session.getSessionScore()
                         );
                     }, turnLengthMs);
                 }
@@ -165,7 +167,8 @@ io.on('connection', (socket) => {
                 socket.emit(
                     'game-state-update',
                     gameState,
-                    session.getTurnHandler().getCurrentMarkTurn()
+                    session.getTurnHandler().getCurrentMarkTurn(),
+                    session.getSessionScore()
                 );
 
                 //  If there are two players for a single socket, it is a local
@@ -186,7 +189,8 @@ io.on('connection', (socket) => {
                 socket.emit(
                     'game-state-update',
                     gameState,
-                    session.getTurnHandler().getCurrentMarkTurn()
+                    session.getTurnHandler().getCurrentMarkTurn(),
+                    session.getSessionScore()
                 );
             }
         } else {
@@ -212,7 +216,8 @@ io.on('connection', (socket) => {
             socket.emit(
                 'game-state-update',
                 gameState,
-                session.getTurnHandler().getCurrentMarkTurn()
+                session.getTurnHandler().getCurrentMarkTurn(),
+                session.getSessionScore()
             );
         }
     });
