@@ -89,11 +89,25 @@ io.on('connection', (socket) => {
             //  The AI's eventListener will trigger them to take their turn
             newAIPlayer.eventListener.on('new-turn', (mark: Mark) => {
                 if (mark === newAIPlayer.mark) {
-                    let boardPosition = playerAIStrategy(session.getGame());
+                    //  Determine an amount of time for the AI to think about their
+                    //  turn. This can be either 1 or 2 seconds
+                    const turnLengthMs =
+                        Math.floor(Math.random() * 2 + 1) * 1000;
 
-                    if (boardPosition) {
-                        session.takeTurn(newAIPlayer, boardPosition);
-                    }
+                    setTimeout(function () {
+                        let boardPosition = playerAIStrategy(session.getGame());
+
+                        if (boardPosition) {
+                            session.takeTurn(newAIPlayer, boardPosition);
+                        }
+
+                        const gameState = session.getGame().getGameState();
+                        socket.emit(
+                            'game-state-update',
+                            gameState,
+                            session.getTurnHandler().getCurrentMarkTurn()
+                        );
+                    }, turnLengthMs);
                 }
             });
 
