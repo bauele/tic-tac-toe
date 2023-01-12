@@ -14,6 +14,7 @@ import { socket } from '../socket';
 import { useNavigate } from 'react-router-dom';
 import { GameState, GameStatus } from '../../server/src/ts/ticTacToeBoard';
 import { Mark } from '../../server/src/ts/enums';
+import { BoardLine } from '../../server/src/ts/lib';
 
 type PlayGameProps = {
     gameMode: gameMode;
@@ -67,8 +68,8 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         buttonTwoOnClick: () => {},
     });
     const [playerTurn, setPlayerTurn] = useState(1);
-    const [victoryPosition, setVictoryPosition] = useState(
-        new Array<{ i: number; j: number }>()
+    const [victoryPosition, setVictoryPosition] = useState<BoardLine | null>(
+        null
     );
 
     const updateBoard = (position: [number, number]) => {
@@ -92,7 +93,10 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                     gameState.status === GameStatus.MARK_TWO_VICTORY
                 ) {
                     //  TODO: This will not always show the correct winning player
-                    showOverlayBoxVictory(currentMarkTurn);
+                    if (gameState.victoryPosition) {
+                        setVictoryPosition(gameState.victoryPosition);
+                        showOverlayBoxVictory(currentMarkTurn);
+                    }
                 }
             }
         );
@@ -193,7 +197,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 buttonTwoText: 'Next Round',
                 buttonTwoOnClick: () => {
                     socket.emit('reset-board');
-                    setVictoryPosition([]);
+                    //setVictoryPosition([]);
                     setOverlayVisible(false);
                 },
             };
@@ -304,7 +308,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             <Gameboard
                 board={board}
                 onUpdate={updateBoard}
-                victoryPosition={victoryPosition}
+                victoryLine={victoryPosition}
             />
             <div className="play-game-grid play-game-score-cards">
                 <ScoreCard
