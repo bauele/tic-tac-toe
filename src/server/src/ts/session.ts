@@ -45,6 +45,12 @@ export class Session {
         this.turnHandler.emitTurn();
     };
 
+    restartGame = () => {
+        this.currentGame = new TicTacToeBoard();
+        this.turnHandler.swapCurrentMarkTurn();
+        this.start();
+    };
+
     takeTurn = (player: Player, boardPosition: BoardPosition) => {
         this.turnHandler.handle_turn(this.currentGame, player, boardPosition);
     };

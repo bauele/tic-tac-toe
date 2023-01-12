@@ -19,6 +19,11 @@ export class TurnHandler {
         return this.currentMarkTurn;
     };
 
+    swapCurrentMarkTurn = () => {
+        this.currentMarkTurn =
+            this.currentMarkTurn === Mark.ONE ? Mark.TWO : Mark.ONE;
+    };
+
     //  Obtains a player's individual EventEmitter for later usage
     attachTurnEmitter = (player: Player) => {
         this.eventEmitters.push(player.eventListener);

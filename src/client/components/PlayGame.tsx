@@ -65,62 +65,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     );
 
     const updateBoard = (position: [number, number]) => {
-        // Disconnect listeners to avoid multiple triggers
-
         socket.emit('gameboard-click', position);
-
-        /*
-        socket.off('game-state-update');
-        socket.on(
-            'game-state-update',
-            (gameState: GameState, currentMarkTurn: Mark) => {
-                //console.log(gameState);
-                //console.log(currentMarkTurn);
-
-                setBoard(gameState.gameboard);
-                if (gameState.status === GameStatus.IN_PROGRESS) {
-                    setPlayerTurn(currentMarkTurn);
-                } else if (
-                    gameState.status === GameStatus.MARK_ONE_VICTORY ||
-                    gameState.status === GameStatus.MARK_TWO_VICTORY
-                ) {
-                    //  TODO: This will not always show the correct winning player
-                    if (gameState.victoryPosition) {
-                        setVictoryPosition(gameState.victoryPosition);
-                        showOverlayBoxVictory(currentMarkTurn);
-                    }
-                } else if (gameState.status === GameStatus.DRAW) {
-                    showOverlayBoxVictory(Mark.NONE);
-                }
-            }
-        );
-        */
-
-        /*
-        socket.on(
-            'game-won',
-            (result: number, victoryPosition: { i: number; j: number }[]) => {
-                setVictoryPosition(victoryPosition);
-
-                if (result === 1) {
-                    let currentScore = score;
-                    currentScore.xWins++;
-                    setScore(currentScore);
-                } else if (result === 2) {
-                    let currentScore = score;
-                    currentScore.oWins++;
-                    setScore(currentScore);
-                } else if (result === 3) {
-                    let currentScore = score;
-                    currentScore.ties++;
-                    setScore(currentScore);
-                }
-                showOverlayBoxVictory(result);
-                setOverlayVisible(true);
-            }
-        );
-        */
-
         socket.on('invalid-player', () => {
             const overlayBox = {
                 visible: true,
@@ -195,7 +140,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                     }}
                     buttonTwoText="Next Round"
                     buttonTwoOnClick={() => {
-                        socket.emit('reset-board');
+                        socket.emit('next-round');
                         setOverlayVisible(false);
                     }}
                 ></OverlayBox>
@@ -215,7 +160,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                     }}
                     buttonTwoText="Next Round"
                     buttonTwoOnClick={() => {
-                        socket.emit('reset-board');
+                        socket.emit('next-round');
                         setOverlayVisible(false);
                     }}
                 ></OverlayBox>
@@ -235,17 +180,15 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             'game-state-update',
             (gameState: GameState, currentMarkTurn: Mark) => {
                 setBoard(gameState.gameboard);
+                setVictoryPosition(gameState.victoryPosition);
+
                 if (gameState.status === GameStatus.IN_PROGRESS) {
                     setPlayerTurn(currentMarkTurn);
                 } else if (
                     gameState.status === GameStatus.MARK_ONE_VICTORY ||
                     gameState.status === GameStatus.MARK_TWO_VICTORY
                 ) {
-                    //  TODO: This will not always show the correct winning player
-                    if (gameState.victoryPosition) {
-                        setVictoryPosition(gameState.victoryPosition);
-                        showOverlayBoxVictory(currentMarkTurn);
-                    }
+                    showOverlayBoxVictory(currentMarkTurn);
                 } else if (gameState.status === GameStatus.DRAW) {
                     showOverlayBoxVictory(Mark.NONE);
                 }
@@ -299,7 +242,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             },
             buttonTwoText: 'Yes, Restart',
             buttonTwoOnClick: () => {
-                socket.emit('reset-board');
+                socket.emit('next-round');
                 setOverlayVisible(false);
             },
         };

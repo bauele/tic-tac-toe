@@ -195,29 +195,27 @@ io.on('connection', (socket) => {
         }
     });
 
-    /*
-    socket.on('reset-board', () => {
-        
-        const player = socketGameMap.get(socket.id);
-        if (player) {
-            const game = gameIdMap.get(player.gameId);
-            if (game) {
-                game.resetGame();
-                socket.emit(
-                    'board-update',
-                    game.getBoard(),
-                    game.getPlayerTurn()
-                );
-            } else {
-                console.log("Unable to locate player's game");
-                // TODO: Send error back to client
+    socket.on('next-round', () => {
+        //  Find the session the player is connected to
+        const players = socketPlayerMap.get(socket.id);
+        if (players) {
+            const player = players[0];
+            const session = playerSessionMap.get(player);
+
+            if (!session) {
+                throw new Error('Error finding player session');
             }
-        } else {
-            console.log('Unable to locate player');
-            // TODO: Send error back to client
+
+            session.restartGame();
+
+            const gameState = session.getGame().getGameState();
+            socket.emit(
+                'game-state-update',
+                gameState,
+                session.getTurnHandler().getCurrentMarkTurn()
+            );
         }
     });
-    */
 });
 
 console.log(`Listening on port ${serverConfig.host.port}`);

@@ -28,6 +28,7 @@ export const Gameboard = ({ board, onUpdate, victoryLine }: GameboardProps) => {
     //  Whenever victoryLine has been changed, the Gameboard determine which
     //  spaces on the board are within that victoryLine
     useEffect(() => {
+        setVictoryLineSpaces(null);
         determineVictoryLineSpaces();
     }, [victoryLine]);
 
