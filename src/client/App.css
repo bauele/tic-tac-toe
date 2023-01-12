@@ -4,10 +4,13 @@
     --semi-dark-navy-shadow: #10212a;
     --light-yellow: #f2b137;
     --light-yellow-shadow: #cc8b13;
+    --light-yellow-hover: #ffc860;
     --light-blue: #31c3bd;
     --light-blue-shadow: #118c87;
+    --light-blue-hover: #65e9e4;
     --silver: #a8bfc9;
     --silver-shadow: #6b8997;
+    --silver-hover: #dbe8ed;
 }
 
 @font-face {
@@ -516,12 +519,24 @@ button {
     background-color: var(--light-yellow);
 }
 
+button.bg-light-yellow:hover {
+    background-color: var(--light-yellow-hover);
+}
+
 .bg-light-blue {
     background-color: var(--light-blue);
 }
 
+button.bg-light-blue:hover {
+    background-color: var(--light-blue-hover);
+}
+
 .bg-silver {
     background-color: var(--silver);
+}
+
+button.bg-silver:hover {
+    background-color: var(--silver-hover);
 }
 
 .box-shadow-semi-dark-navy {
