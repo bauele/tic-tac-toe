@@ -55,18 +55,10 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     });
 
     const [overlayVisible, setOverlayVisible] = useState(false);
+    const [testOverlay, setTestOverlay] = useState<
+        OverlayBox | null | JSX.Element
+    >(null);
 
-    const [overlayBox, setOverlayBox] = useState({
-        visible: false,
-        mainText: '',
-        mainTextColor: '',
-        mainImage: '',
-        subText: '',
-        buttonOneText: '',
-        buttonOneOnClick: () => {},
-        buttonTwoText: '',
-        buttonTwoOnClick: () => {},
-    });
     const [playerTurn, setPlayerTurn] = useState(1);
     const [victoryPosition, setVictoryPosition] = useState<BoardLine | null>(
         null
@@ -97,6 +89,8 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                         setVictoryPosition(gameState.victoryPosition);
                         showOverlayBoxVictory(currentMarkTurn);
                     }
+                } else if (gameState.status === GameStatus.DRAW) {
+                    showOverlayBoxVictory(Mark.NONE);
                 }
             }
         );
@@ -143,17 +137,12 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 buttonTwoOnClick: () => {},
             };
 
-            setOverlayBox(overlayBox);
             setOverlayVisible(true);
         });
     };
 
-    const updatePlayerTurn = () => {
-        setPlayerTurn(playerTurn === 1 ? 2 : 1);
-    };
-
     const showOverlayBoxVictory = (winningPlayer: number) => {
-        const subtextString = () => {
+        const determineSubtextString = () => {
             if (gameMode === 'singlePlayer') {
                 if (
                     (winningPlayer === 1 && playerMark === 0) ||
@@ -171,72 +160,77 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 }
             }
         };
-        if (winningPlayer === 1 || winningPlayer === 2) {
-            const overlayBox = {
-                visible: true,
 
-                mainImage:
-                    winningPlayer === 1
-                        ? `${xTokenImage}`
-                        : winningPlayer === 2
-                        ? `${oTokenImage}`
-                        : '',
-                subText: subtextString(),
+        const determineTextColor = (winningMark: Mark) => {
+            if (winningMark === Mark.ONE) {
+                return 'overlay-light-blue';
+            } else if (winningMark === Mark.TWO) {
+                return 'overlay-light-yellow';
+            } else {
+                return '';
+            }
+        };
 
-                mainText: 'Takes the round!',
-                mainTextColor:
-                    winningPlayer === 1
-                        ? `overlay-light-blue`
-                        : winningPlayer === 2
-                        ? `overlay-light-yellow`
-                        : '',
-                buttonOneText: 'Quit',
-                buttonOneOnClick: () => {
-                    navigate('/');
-                },
-                buttonTwoText: 'Next Round',
-                buttonTwoOnClick: () => {
-                    socket.emit('reset-board');
-                    //setVictoryPosition([]);
-                    setOverlayVisible(false);
-                },
-            };
-            setOverlayVisible(true);
+        const determineImage = (winningMark: Mark) => {
+            if (winningMark === Mark.ONE) {
+                return `${xTokenImage}`;
+            } else if (winningMark === Mark.TWO) {
+                return `${oTokenImage}`;
+            } else {
+                return '';
+            }
+        };
 
-            setOverlayBox(overlayBox);
-        }
-
-        // Tie condition
-        else if (winningPlayer === 3) {
-            const overlayBox = {
-                visible: true,
-                mainTextColor: '',
-                mainImage: '',
-                subText: '',
-
-                mainText: 'Round tied',
-                buttonOneText: 'Quit',
-                buttonOneOnClick: () => {
-                    navigate('/');
-                },
-                buttonTwoText: 'Next Round',
-                buttonTwoOnClick: () => {
-                    socket.emit('reset-board');
-
-                    setOverlayVisible(false);
-                },
-            };
+        if (winningPlayer === Mark.ONE || winningPlayer === Mark.TWO) {
+            setTestOverlay(
+                <OverlayBox
+                    subText={determineSubtextString()}
+                    mainText="Takes the round!"
+                    mainTextColor={determineTextColor(winningPlayer)}
+                    mainImage={determineImage(winningPlayer)}
+                    buttonOneText="Quit"
+                    buttonOneOnClick={() => {
+                        navigate('/');
+                    }}
+                    buttonTwoText="Next Round"
+                    buttonTwoOnClick={() => {
+                        socket.emit('reset-board');
+                        setOverlayVisible(false);
+                    }}
+                ></OverlayBox>
+            );
 
             setOverlayVisible(true);
-            setOverlayBox(overlayBox);
+        } else if (winningPlayer === Mark.NONE) {
+            setTestOverlay(
+                <OverlayBox
+                    subText={determineSubtextString()}
+                    mainText="Round tied"
+                    mainTextColor={determineTextColor(winningPlayer)}
+                    mainImage={determineImage(winningPlayer)}
+                    buttonOneText="Quit"
+                    buttonOneOnClick={() => {
+                        navigate('/');
+                    }}
+                    buttonTwoText="Next Round"
+                    buttonTwoOnClick={() => {
+                        socket.emit('reset-board');
+                        setOverlayVisible(false);
+                    }}
+                ></OverlayBox>
+            );
+
+            setOverlayVisible(true);
         }
     };
 
     useEffect(() => {
+        /*
         socket.on('board-update', (board, playerTurn) => {
             setBoard(board);
             setPlayerTurn(playerTurn);
         });
+        */
     }, []);
 
     const firstScoreCardText = () => {
@@ -289,8 +283,6 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                 setOverlayVisible(false);
             },
         };
-
-        setOverlayBox(overlayBox);
     };
 
     return (
@@ -326,16 +318,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             {overlayVisible ? (
                 <>
                     <div className="overlay-shadow" />
-                    <OverlayBox
-                        subText={overlayBox.subText}
-                        mainText={overlayBox.mainText}
-                        mainTextColor={overlayBox.mainTextColor}
-                        mainImage={overlayBox.mainImage}
-                        buttonOneText={overlayBox.buttonOneText}
-                        buttonOneOnClick={overlayBox.buttonOneOnClick}
-                        buttonTwoText={overlayBox.buttonTwoText}
-                        buttonTwoOnClick={overlayBox.buttonTwoOnClick}
-                    ></OverlayBox>
+                    {testOverlay}
                 </>
             ) : (
                 <></>
