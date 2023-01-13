@@ -55,7 +55,7 @@ describe('tic tac toe board', () => {
         }).toThrow(RangeError);
 
         expect(ticTacToeBoard.getBoard()).toEqual([
-            [Mark.ONE, Mark.NONE, Mark.NONE],
+            [Mark.NONE, Mark.NONE, Mark.NONE],
             [Mark.NONE, Mark.NONE, Mark.NONE],
             [Mark.NONE, Mark.NONE, Mark.NONE],
         ]);

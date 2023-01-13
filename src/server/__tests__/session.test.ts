@@ -4,14 +4,13 @@ import { Mark } from '../src/ts/enums';
 import { Player, PlayerType } from '../src/ts/player';
 import { Session } from '../src/ts/session';
 import { playerAIStrategy } from '../src/ts/player';
-import { EventEmitter } from 'stream';
+var events = require('events');
 
 it('should create a new session', () => {
     const session = new Session();
     expect(session).toBeTruthy();
 });
 
-/*
 describe('adding players to a session', () => {
     it('should add a player to the session', () => {
         const session = new Session();
@@ -19,7 +18,7 @@ describe('adding players to a session', () => {
             name: 'player-one',
             type: PlayerType.HUMAN,
             mark: Mark.ONE,
-            gameId: 'none',
+            eventListener: new events.EventEmitter(),
         };
 
         session.addPlayer(playerOne);
@@ -33,14 +32,14 @@ describe('adding players to a session', () => {
             name: 'player-one',
             type: PlayerType.HUMAN,
             mark: Mark.ONE,
-            gameId: 'none',
+            eventListener: new events.EventEmitter(),
         };
 
         const playerTwo = {
             name: 'player-one',
             type: PlayerType.HUMAN,
             mark: Mark.TWO,
-            gameId: 'none',
+            eventListener: new events.EventEmitter(),
         };
 
         session.addPlayer(playerOne);
@@ -55,21 +54,21 @@ describe('adding players to a session', () => {
             name: 'player-one',
             type: PlayerType.HUMAN,
             mark: Mark.ONE,
-            gameId: 'none',
+            eventListener: new events.EventEmitter(),
         };
 
         const playerTwo = {
             name: 'player-one',
             type: PlayerType.AI,
             mark: Mark.TWO,
-            gameId: 'none',
+            eventListener: new events.EventEmitter(),
         };
 
         const playerThree = {
             name: 'player-one',
             type: PlayerType.HUMAN,
             mark: Mark.ONE,
-            gameId: 'none',
+            eventListener: new events.EventEmitter(),
         };
 
         session.addPlayer(playerOne);
@@ -81,29 +80,41 @@ describe('adding players to a session', () => {
         expect(session.getPlayers().length).toEqual(2);
     });
 });
-*/
 
 describe('taking turns', () => {
     //  For the purpose of this test, it does not matter how the game was set
     //  up, nor does it matter if the game is being played by humans or AI. It
     //  Simply expects that given a session with assigned players, a turn
     //  should be able to be taken.
-    /*
+
     it('should let the AI take the first turn if they are using Mark One', () => {
         const session = new Session();
         const playerOne = {
             name: 'player-one',
             type: PlayerType.AI,
             mark: Mark.ONE,
-            gameId: 'none',
+            eventListener: new events.EventEmitter(),
         };
 
         const playerTwo = {
             name: 'player-one',
             type: PlayerType.HUMAN,
             mark: Mark.TWO,
-            gameId: 'none',
+            eventListener: new events.EventEmitter(),
         };
+
+        playerOne.eventListener.on('new-turn', (mark: Mark) => {
+            if (mark === playerOne.mark) {
+                //  Look at board and determine where to go next
+                let boardPosition = playerAIStrategy(session.getGame());
+                //console.log(boardPosition);
+
+                //  If a valid position was found
+                if (boardPosition) {
+                    session.takeTurn(playerOne, boardPosition);
+                }
+            }
+        });
 
         session.addPlayer(playerOne);
         session.addPlayer(playerTwo);
@@ -114,10 +125,8 @@ describe('taking turns', () => {
             [Mark.NONE, Mark.NONE, Mark.NONE],
         ]);
     });
-    */
 
     it('should let two AI players continously take turns', () => {
-        var events = require('events');
         const session = new Session();
         const playerOne = {
             name: 'player-one',
@@ -159,7 +168,7 @@ describe('taking turns', () => {
                 //console.log('Player 2 is going');
                 //  Look at board and determine where to go next
                 let boardPosition = playerAIStrategy(session.getGame());
-                console.log(boardPosition);
+                //console.log(boardPosition);
 
                 //  If a valid position was found
                 if (boardPosition) {
@@ -172,13 +181,11 @@ describe('taking turns', () => {
         expect(session.getGame().getBoard()).toEqual([
             [Mark.ONE, Mark.TWO, Mark.ONE],
             [Mark.TWO, Mark.ONE, Mark.TWO],
-            [Mark.ONE, Mark.TWO, Mark.ONE],
+            [Mark.ONE, Mark.NONE, Mark.NONE],
         ]);
     });
 
     it('should let an AI and Human player alternate their turns', () => {
-        var events = require('events');
-
         const session = new Session();
         const playerOne = {
             name: 'player-one',
@@ -199,10 +206,8 @@ describe('taking turns', () => {
 
         playerTwo.eventListener.on('new-turn', (mark: Mark) => {
             if (mark === playerTwo.mark) {
-                //console.log('Player 2 is going');
                 //  Look at board and determine where to go next
                 let boardPosition = playerAIStrategy(session.getGame());
-                console.log(boardPosition);
 
                 //  If a valid position was found
                 if (boardPosition) {
