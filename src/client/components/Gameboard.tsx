@@ -210,7 +210,7 @@ export const Gameboard = ({
                 <img
                     className="gameboard-token"
                     src={oTokenImage}
-                    aria-label="x-mark"
+                    aria-label="o-mark"
                 />
             );
         }

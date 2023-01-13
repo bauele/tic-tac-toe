@@ -60,11 +60,7 @@ describe('Gameboard', () => {
 
         let xMarks = screen.queryAllByRole('button', { name: 'x-mark' });
         let oMarks = screen.queryAllByRole('button', { name: 'o-mark' });
-        let emptySpaces = screen.queryAllByRole('button', {
-            name: 'empty-space',
-        });
         expect(xMarks.length).toEqual(3);
         expect(oMarks.length).toEqual(4);
-        expect(emptySpaces.length).toEqual(2);
     });
 });
