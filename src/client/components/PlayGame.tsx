@@ -11,34 +11,19 @@ import oTokenImage from '../assets/icon-o.svg';
 import logo from '../assets/logo.svg';
 import { socket } from '../socket';
 
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { GameState, GameStatus } from '../../server/src/ts/ticTacToeBoard';
 import { Mark } from '../../server/src/ts/enums';
 import { BoardLine } from '../../server/src/ts/lib';
 import { SessionScoreInfo } from '../../server/src/ts/session';
 
 type PlayGameProps = {
+    //  Prop indicating the game mode the player would like to play
     gameMode: gameMode;
-    playerMark: number;
+
+    //  Prop indicating the mark the player will be using
+    playerMark: Mark;
 };
-
-interface OverlayBox {
-    visible: boolean;
-    mainText: string;
-    mainTextColor?: string;
-    mainImage?: string;
-    subText?: string;
-    buttonOneText: string;
-    buttonOneOnClick?: () => void;
-    buttonTwoText: string;
-    buttonTwoOnClick?: () => void;
-}
-
-interface Score {
-    xWins: 0;
-    oWins: 0;
-    ties: 0;
-}
 
 export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     const navigate = useNavigate();
@@ -56,51 +41,153 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     });
 
     const [overlayVisible, setOverlayVisible] = useState(false);
-    const [testOverlay, setTestOverlay] = useState<
-        OverlayBox | null | JSX.Element
-    >(null);
 
-    const [playerTurn, setPlayerTurn] = useState(1);
+    //  overlay will refer to a OverlayBox component that is built and shown
+    //  on the screen after a player victory or draw
+    const [overlay, setOverlay] = useState<JSX.Element | null>(null);
+
+    const [playerTurn, setPlayerTurn] = useState(Mark.ONE);
     const [victoryPosition, setVictoryPosition] = useState<BoardLine | null>(
         null
     );
 
-    const updateBoard = (position: [number, number]) => {
-        socket.emit('gameboard-click', position);
-        socket.on('invalid-player', () => {
-            const overlayBox = {
-                visible: true,
+    useEffect(() => {
+        //  Disconnect from the socket even to avoid multiple triggers
+        socket.off('game-state-update');
 
-                mainTextColor: '',
-                mainImage: '',
-                subText: `You refreshed the page`,
+        //  This event is received from the server when information about the
+        //  player's game changes
+        socket.on(
+            'game-state-update',
+            (
+                gameState: GameState,
+                currentMarkTurn: Mark,
+                sessionScore: SessionScoreInfo
+            ) => {
+                //  Set the board to the same state as the server's board
+                setBoard(gameState.gameboard);
 
-                mainText: `Let's get you back to the main menu`,
-                buttonOneText: 'Okay!',
-                buttonOneOnClick: () => {
-                    navigate('/');
-                },
-                buttonTwoText: '',
-                buttonTwoOnClick: () => {},
-            };
+                //  Update the score
+                setScore({
+                    xWins: sessionScore.markOneWins,
+                    oWins: sessionScore.markTwoWins,
+                    ties: sessionScore.draws,
+                });
 
-            setOverlayVisible(true);
-        });
+                //  Set the victory position on the game board.
+                setVictoryPosition(gameState.victoryPosition);
+
+                //  Determine what UI indicators to show the player based on
+                //  the current state of the game
+                if (gameState.status === GameStatus.IN_PROGRESS) {
+                    setPlayerTurn(currentMarkTurn);
+                } else if (
+                    gameState.status === GameStatus.MARK_ONE_VICTORY ||
+                    gameState.status === GameStatus.MARK_TWO_VICTORY
+                ) {
+                    showOverlayBoxVictory(currentMarkTurn);
+                } else if (gameState.status === GameStatus.DRAW) {
+                    showOverlayBoxVictory(Mark.NONE);
+                }
+            }
+        );
+
+        //  If page is refreshed, direct user back to main screen
+        window.onload = function () {
+            navigate('/');
+        };
+
+        return () => {
+            window.onload = null;
+        };
+    }, []);
+
+    //  Function that determines which game token outlines will be present
+    //  when the player hovers over a GameboardSpace. If player is in a
+    //  single player game, then they should only see their own mark. If
+    //  it's a multiplayer game, then both marks should be visible
+    const determineOutlineMode = () => {
+        if (gameMode === 'singlePlayer') {
+            if (playerMark === Mark.ONE) {
+                return TokenOutlineMode.MARK_ONE_ONLY;
+            } else if (playerMark === Mark.TWO) {
+                return TokenOutlineMode.MARK_TWO_ONLY;
+            }
+        } else if (gameMode === 'localMultiplayer') {
+            return TokenOutlineMode.BOTH_MARKS;
+        }
     };
 
+    //  Function that is called whenever player clicks on a space on the
+    //  Gameboard
+    const updateBoard = (position: [number, number]) => {
+        socket.emit('gameboard-click', position);
+    };
+
+    //  Function defining behavior for the reload button
+    const reloadGame = () => {
+        setOverlay(
+            <OverlayBox
+                mainText="Restart game?"
+                buttonOneText="No, cancel"
+                buttonOneOnClick={() => {
+                    setOverlayVisible(false);
+                }}
+                buttonTwoText="Yes, Restart"
+                buttonTwoOnClick={() => {
+                    socket.emit('next-round');
+                    setOverlayVisible(false);
+                }}
+            ></OverlayBox>
+        );
+
+        setOverlayVisible(true);
+    };
+
+    //  Functions used to determine what text is present on the ScoreCards
+    const firstScoreCardText = () => {
+        if (gameMode === 'singlePlayer') {
+            if (playerMark === Mark.ONE) {
+                return 'X (You)';
+            } else {
+                return 'X (CPU)';
+            }
+        } else if (gameMode === 'localMultiplayer') {
+            return 'P1 (X)';
+        } else {
+            return 'Error';
+        }
+    };
+
+    const secondScoreCardText = () => {
+        if (gameMode === 'singlePlayer') {
+            if (playerMark === Mark.ONE) {
+                return 'O (CPU)';
+            } else {
+                return 'O (You)';
+            }
+        } else if (gameMode === 'localMultiplayer') {
+            return 'P2 (O)';
+        } else {
+            return 'Error';
+        }
+    };
+
+    //  Function dedicated to building the OverlayBox component that is shown
+    //  after a game victory or draw
     const showOverlayBoxVictory = (winningPlayer: number) => {
         const determineSubtextString = () => {
             if (gameMode === 'singlePlayer') {
                 if (
-                    (winningPlayer === 1 && playerMark === 0) ||
-                    (winningPlayer === 2 && playerMark === 1)
+                    (winningPlayer === Mark.ONE && playerMark === Mark.TWO) ||
+                    (winningPlayer === Mark.TWO && playerMark === Mark.ONE)
                 ) {
                     return 'You won!';
                 } else {
                     return 'Oh no, you lost...';
                 }
             } else {
-                if (winningPlayer === 1) {
+                if (winningPlayer === Mark.ONE) {
                     return 'Player 1 wins!';
                 } else {
                     return 'Player 2 wins!';
@@ -129,7 +216,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         };
 
         if (winningPlayer === Mark.ONE || winningPlayer === Mark.TWO) {
-            setTestOverlay(
+            setOverlay(
                 <OverlayBox
                     subText={determineSubtextString()}
                     mainText="Takes the round!"
@@ -149,7 +236,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
 
             setOverlayVisible(true);
         } else if (winningPlayer === Mark.NONE) {
-            setTestOverlay(
+            setOverlay(
                 <OverlayBox
                     subText={determineSubtextString()}
                     mainText="Round tied"
@@ -168,116 +255,6 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             );
 
             setOverlayVisible(true);
-        }
-    };
-
-    //  This is necessary in order for the board to be updated
-    //  if the AI is going first
-    useEffect(() => {
-        console.log('use effect call');
-
-        socket.off('game-state-update');
-        socket.on(
-            'game-state-update',
-            (
-                gameState: GameState,
-                currentMarkTurn: Mark,
-                sessionScore: SessionScoreInfo
-            ) => {
-                setScore({
-                    xWins: sessionScore.markOneWins,
-                    oWins: sessionScore.markTwoWins,
-                    ties: sessionScore.draws,
-                });
-
-                setBoard(gameState.gameboard);
-                setVictoryPosition(gameState.victoryPosition);
-
-                if (gameState.status === GameStatus.IN_PROGRESS) {
-                    setPlayerTurn(currentMarkTurn);
-                } else if (
-                    gameState.status === GameStatus.MARK_ONE_VICTORY ||
-                    gameState.status === GameStatus.MARK_TWO_VICTORY
-                ) {
-                    showOverlayBoxVictory(currentMarkTurn);
-                } else if (gameState.status === GameStatus.DRAW) {
-                    showOverlayBoxVictory(Mark.NONE);
-                }
-            }
-        );
-    }, []);
-
-    useEffect(() => {
-        window.onload = function () {
-            navigate('/');
-        };
-
-        return () => {
-            window.onload = null;
-        };
-    }, []);
-
-    const firstScoreCardText = () => {
-        if (gameMode === 'singlePlayer') {
-            if (playerMark === 0) {
-                return 'X (You)';
-            } else {
-                return 'X (CPU)';
-            }
-        } else if (gameMode === 'localMultiplayer') {
-            return 'P1 (X)';
-        } else {
-            return 'Error';
-        }
-    };
-
-    const secondScoreCardText = () => {
-        if (gameMode === 'singlePlayer') {
-            if (playerMark === 0) {
-                return 'O (CPU)';
-            } else {
-                return 'O (You)';
-            }
-        } else if (gameMode === 'localMultiplayer') {
-            return 'P2 (O)';
-        } else {
-            return 'Error';
-        }
-    };
-
-    const reloadGame = () => {
-        setTestOverlay(
-            <OverlayBox
-                mainText="Restart game?"
-                buttonOneText="No, cancel"
-                buttonOneOnClick={() => {
-                    setOverlayVisible(false);
-                }}
-                buttonTwoText="Yes, Restart"
-                buttonTwoOnClick={() => {
-                    socket.emit('next-round');
-                    setOverlayVisible(false);
-                }}
-            ></OverlayBox>
-        );
-
-        setOverlayVisible(true);
-    };
-
-    const determineOutlineMode = () => {
-        console.log(gameMode);
-
-        if (gameMode === 'singlePlayer') {
-            console.log(playerMark);
-
-            if (playerMark + 1 === Mark.ONE) {
-                return TokenOutlineMode.MARK_ONE_ONLY;
-            } else if (playerMark + 1 === Mark.TWO) {
-                return TokenOutlineMode.MARK_TWO_ONLY;
-            }
-        } else if (gameMode === 'localMultiplayer') {
-            return TokenOutlineMode.BOTH_MARKS;
-        } else {
         }
     };
 
@@ -321,7 +298,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             {overlayVisible ? (
                 <>
                     <div className="overlay-shadow" />
-                    {testOverlay}
+                    {overlay}
                 </>
             ) : (
                 <></>

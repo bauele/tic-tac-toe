@@ -1,6 +1,11 @@
 type ScoreCardProps = {
+    //  Prop indicating the color of the ScoreCard
     color: 'light-blue' | 'light-yellow' | 'silver';
+
+    //  Prop indicating the heading of the ScoreCard
     heading: string;
+
+    //  Prop indicating the score value of the ScoreCard
     score: number;
 };
 

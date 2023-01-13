@@ -2,6 +2,7 @@ import xTokenImage from '../assets/icon-x.svg';
 import oTokenImage from '../assets/icon-o.svg';
 
 type PlayerTurnIndicatorProps = {
+    //  Prop indicating the current player's turn
     playerTurn: number;
 };
 

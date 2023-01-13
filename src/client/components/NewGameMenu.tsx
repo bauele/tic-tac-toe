@@ -8,6 +8,8 @@ import xTokenImage from '../assets/icon-x.svg';
 import oTokenImage from '../assets/icon-o.svg';
 
 type NewGameMenuProps = {
+    //  Prop representing a function to call when the buttons available to
+    //  select a game mode are clicked
     gameModeButtonOnClick: ({ mark, mode }: gameSettings) => void;
 };
 

@@ -11,17 +11,20 @@ import './App.css';
 function App() {
     const [gameMode, setGameMode] = useState('');
     const [playerMark, setPlayerMark] = useState(0);
+
     const navigate = useNavigate();
 
     const selectGameMode = ({ mark, mode }: gameSettings) => {
         if (gameModes.includes(mode)) {
             setGameMode(mode);
-            setPlayerMark(mark);
-            navigate('/play');
 
-            /*  Adding 1 to mark is necessary to translate the Switch
-                component's off/on values from 0-1 to 1-2 for the server */
+            //  Switch component's on/off values are 0-1 respectively. Adding
+            //  1 is necessary to properly represent the token values of
+            //  1 and 2.
+            setPlayerMark(mark + 1);
             socket.emit('new-game', { mark: mark + 1, mode });
+
+            navigate('/play');
         } else {
             alert('Invalid game mode');
         }
