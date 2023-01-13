@@ -92,6 +92,12 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
             }
         );
 
+        //  This message is recieved if the server cannot identify which game a
+        //  player is supposed to be associated with
+        socket.on('invalid-player', () => {
+            showOverlayBoxInvalidPlayer();
+        });
+
         //  If page is refreshed, direct user back to main screen
         window.onload = function () {
             navigate('/');
@@ -171,6 +177,23 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
         } else {
             return 'Error';
         }
+    };
+
+    const showOverlayBoxInvalidPlayer = () => {
+        setOverlay(
+            <OverlayBox
+                subText="Let's get you back to the menu"
+                mainText="Sorry, we lost your game!"
+                buttonOneText="Ok"
+                buttonOneOnClick={() => {
+                    navigate('/');
+                    setOverlayVisible(false);
+                }}
+                buttonTwoText=""
+            ></OverlayBox>
+        );
+
+        setOverlayVisible(true);
     };
 
     //  Function dedicated to building the OverlayBox component that is shown

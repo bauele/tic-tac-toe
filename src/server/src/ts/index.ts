@@ -150,7 +150,9 @@ io.on('connection', (socket) => {
             const session = playerSessionMap.get(player);
 
             if (!session) {
-                throw new Error('Error finding player session');
+                console.log('Error finding player session');
+                socket.emit('invalid-player');
+                return;
             }
 
             //  If the map has two players for a single socket, then it is a
@@ -195,7 +197,9 @@ io.on('connection', (socket) => {
             }
         } else {
             socket.emit('invalid-player');
-            throw Error('Error finding players for session');
+            console.log('Error finding player session');
+            socket.emit('invalid-player');
+            return;
         }
     });
 
@@ -207,7 +211,9 @@ io.on('connection', (socket) => {
             const session = playerSessionMap.get(player);
 
             if (!session) {
-                throw new Error('Error finding player session');
+                console.log('Error finding player session');
+                socket.emit('invalid-player');
+                return;
             }
 
             session.restartGame();
