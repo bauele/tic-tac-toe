@@ -1,4 +1,3 @@
-const uuid = require('uuid');
 import { BoardPosition } from './enums';
 import { Player } from '../ts/player';
 import { GameStatus, TicTacToeBoard } from './ticTacToeBoard';
@@ -13,15 +12,12 @@ export interface SessionScoreInfo {
 //  A Session object represents a given game, its players, and information
 //  about the game's score and turn information
 export class Session {
-    sessionId: string;
     sessionScore: SessionScoreInfo;
     currentGame: TicTacToeBoard;
     turnHandler: TurnHandler;
     players: Player[];
 
     constructor() {
-        this.sessionId = uuid.v4();
-
         this.sessionScore = {
             markOneWins: 0,
             markTwoWins: 0,
@@ -32,10 +28,6 @@ export class Session {
         this.turnHandler = new TurnHandler();
         this.players = new Array<Player>();
     }
-
-    getSessionId = () => {
-        return this.sessionId;
-    };
 
     getTurnHandler = () => {
         return this.turnHandler;
