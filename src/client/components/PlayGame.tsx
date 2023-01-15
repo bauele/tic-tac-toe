@@ -201,10 +201,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
     const showOverlayBoxVictory = (winningPlayer: number) => {
         const determineSubtextString = () => {
             if (gameMode === 'singlePlayer') {
-                if (
-                    (winningPlayer === Mark.ONE && playerMark === Mark.TWO) ||
-                    (winningPlayer === Mark.TWO && playerMark === Mark.ONE)
-                ) {
+                if (winningPlayer === playerMark) {
                     return 'You won!';
                 } else {
                     return 'Oh no, you lost...';
