@@ -55,15 +55,21 @@ export class Session {
     };
 
     takeTurn = (player: Player, boardPosition: BoardPosition) => {
-        this.turnHandler.handle_turn(this.currentGame, player, boardPosition);
-
-        const gameStatus = this.getGame().getGameState().status;
-        if (gameStatus === GameStatus.MARK_ONE_VICTORY) {
-            this.addMarkOneWin();
-        } else if (gameStatus === GameStatus.MARK_TWO_VICTORY) {
-            this.addMarkTwoWin();
-        } else if (gameStatus === GameStatus.DRAW) {
-            this.addDraw();
+        if (
+            this.turnHandler.handle_turn(
+                this.currentGame,
+                player,
+                boardPosition
+            )
+        ) {
+            const gameStatus = this.getGame().getGameState().status;
+            if (gameStatus === GameStatus.MARK_ONE_VICTORY) {
+                this.addMarkOneWin();
+            } else if (gameStatus === GameStatus.MARK_TWO_VICTORY) {
+                this.addMarkTwoWin();
+            } else if (gameStatus === GameStatus.DRAW) {
+                this.addDraw();
+            }
         }
     };
 
