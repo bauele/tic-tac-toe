@@ -523,24 +523,26 @@ button {
     background-color: var(--light-yellow);
 }
 
-button.bg-light-yellow:hover {
-    background-color: var(--light-yellow-hover);
-}
-
 .bg-light-blue {
     background-color: var(--light-blue);
-}
-
-button.bg-light-blue:hover {
-    background-color: var(--light-blue-hover);
 }
 
 .bg-silver {
     background-color: var(--silver);
 }
 
-button.bg-silver:hover {
-    background-color: var(--silver-hover);
+@media (hover: hover) and (pointer: fine) {
+    button.bg-light-yellow:hover {
+        background-color: var(--light-yellow-hover);
+    }
+
+    button.bg-light-blue:hover {
+        background-color: var(--light-blue-hover);
+    }
+
+    button.bg-silver:hover {
+        background-color: var(--silver-hover);
+    }
 }
 
 .box-shadow-semi-dark-navy {

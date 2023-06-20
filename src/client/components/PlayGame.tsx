@@ -8,6 +8,7 @@ import { gameMode } from '../../server/src/ts/lib';
 
 import xTokenImage from '../assets/icon-x.svg';
 import oTokenImage from '../assets/icon-o.svg';
+import reloadImage from '../assets/icon-restart.svg';
 import logo from '../assets/logo.svg';
 import { socket } from '../socket';
 
@@ -292,7 +293,7 @@ export const PlayGame = ({ gameMode, playerMark }: PlayGameProps) => {
                     className="play-game-reload play-game-top-menu-expanding-element bg-silver box-shadow-silver-sm"
                     onClick={reloadGame}
                 >
-                    <p className="heading-xs">↻</p>
+                    <img src={reloadImage}></img>
                 </button>
             </div>
             <Gameboard
