@@ -1,6 +1,8 @@
 # Tic Tac Toe
 
-A classic singleplayer or multiplayer built with React, Node.js, Socket.io, and Typescript.
+A classic singleplayer or local multiplayer built with React, Node.js, Socket.io, and Typescript. Project was built using design images provided for this challenge on [Frontend Mentor](https://www.frontendmentor.io/challenges/tic-tac-toe-game-Re7ZF_E2v).
+
+<img  src="http://data.bauele.com/tic-tac-toe.png" width="750" />
 
 ## Installation
 
