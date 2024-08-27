@@ -37,6 +37,6 @@ git update-index --skip-worktree <path-name>
 From the main directory, run each command in its own terminal
 
 ```
-node ./src/server/src/js/server/src/ts/index.js
+node ./src/server/src/js/index.js
 npm run start
 ```
